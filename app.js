@@ -37,6 +37,15 @@ app.get('/v1/locadora/filme', cors(), async (request, response) => {
     response.json(filme)
 })
 
+app.get('/v1/locadora/filme/:id', cors(), async (request, response) => {
+
+    let idFilme = request.params.id
+
+    let filme = await controllerFilme.buscarFilmeId(idFilme)
+    response.status(filme.status_code)
+    response.json(filme)
+})
+
 app.listen(PORT, () => {
-    console.log('API aguardando requisições!!!')
+    console.log('API aguardando requisições...')
 })

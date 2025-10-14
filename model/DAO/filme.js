@@ -87,8 +87,35 @@ const getSelectMoviesById = async (id) => {
 }
 
 //insere um filme novo no banco de dados
-const setInsertMovies = async () => {
+const setInsertMovies = async (filme) => {
+    try {
+        
+        let sql = `INSERT INTO tbl_filme ( nome,
+						sinopse,
+                        data_lancamento,
+                        duracao,
+                        orcamento,
+                        trailer,
+                        capa)
+					values( '${filme.nome}',
+							'${filme.sinopse}',
+                            '${filme.data_lancamento}',
+                            '${filme.duracao}',
+                            '${filme.orcamento}',
+                            '${filme.trailer}',
+                            '${filme.capa}')`
 
+        //executeRawUnsafe() -> executa o script SQL que não tem retorno de valores
+        let result = await prisma.$executeRawUnsafe(sql)
+
+        if(result)
+            return true
+        else
+            return false
+
+    } catch (error){
+        return false
+    }
 }
 
 //altera um filme pelo ID no banco de dados
@@ -103,5 +130,6 @@ const setDeleteMovies = async (id) => {
 
 module.exports = {
     getSelectAllMovies,
-    getSelectMoviesById
+    getSelectMoviesById,
+    setInsertMovies
 }

@@ -30,22 +30,7 @@ INSERT INTO tbl_filme ( nome,
                             '02:33:00',
                             70000000,
                             'https://economia.uol.com.br/videos/?id=trailer-do-filme-bastardos-inglorios-04023060DCB15346',
-                            'https://br.web.img3.acsta.net/c_310_420/medias/nmedia/18/90/43/36/20096333.jpg');
-
-INSERT INTO tbl_filme ( nome,
-						sinopse,
-                        data_lancamento,
-                        duracao,
-                        orcamento,
-                        trailer,
-                        capa)
-					values( 'Rambo - Programado para Matar',
-							'Rambo: Programado Para Matar é um intenso drama de ação que segue John Rambo (Sylvester Stallone), um veterano da Guerra do Vietnã que, após ser injustamente preso pelo xerife Will Teasle (Brian Dennehy) em uma pequena cidade, foge e inicia uma luta sangrenta contra a autoridade local. No processo, Rambo, habilidoso e implacável, não apenas confronta Teasle, mas enfrenta toda a cidade, provocando pânico e destruição enquanto tenta escapar de uma armadilha mortal. O filme é um retrato de um homem em guerra com seus próprios demônios, enquanto lida com a brutalidade de um sistema que não o compreende. A história de Rambo se tornou um clássico do cinema, explorando temas de sobrevivência, trauma de guerra e a resistência contra a opressão.',
-                            '1982-11-06',
-                            '01:37:00',
-                            15000000,
-                            'https://www.youtube.com/watch?v=Rl_4vPKDijQ',
-                            'https://br.web.img3.acsta.net/c_310_420/medias/nmedia/18/97/40/18/20527154.jpg');                           
+                            'https://br.web.img3.acsta.net/c_310_420/medias/nmedia/18/90/43/36/20096333.jpg');                   
 
 --verificar os dados da tabela
 select * from tbl_filme;

@@ -70,6 +70,21 @@ app.post('/v1/locadora/filme', cors(), bodyParserJSON, async (request, response)
 
 })
 
+app.put('/v1/locadora/filme/:id', cors(), bodyParserJSON, async (request, response) => {
+    //recebe o id do filme
+    let idFilme = request.params.id
+    //recebe os dados a serem atualizados
+    let dadosBody = request.body
+    //recebe content-type da requisição
+    let contentType = request.headers['content-type']
+
+    //chama a função para atualizar o filme e encaminha os dados, o id e o content-type
+    let filme = await controllerFilme.atualizarFilme(dadosBody, idFilme, contentType)
+
+    response.status(filme.status_code)
+    response.json(filme)
+})
+
 app.listen(PORT, () => {
     console.log('API aguardando requisições...')
 })

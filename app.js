@@ -85,6 +85,16 @@ app.put('/v1/locadora/filme/:id', cors(), bodyParserJSON, async (request, respon
     response.json(filme)
 })
 
+app.delete('/v1/locadora/filme/delete/:id', cors(), bodyParserJSON, async (request, response) => {
+
+    let idFilme = request.params.id
+
+    let filme = await controllerFilme.excluirFilme(idFilme)
+
+    response.status(filme.status_code)
+    response.json(filme)
+})
+
 app.listen(PORT, () => {
     console.log('API aguardando requisições...')
 })

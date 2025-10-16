@@ -230,27 +230,31 @@ const atualizarFilme = async (filme, id, contentType) => {
 //exclui um filme buscando pelo id
 const excluirFilme = async (id) => {
 
-    //criando um objeto novo para as mensagens
+     //criando um objeto novo para as mensagens
     let MESSAGES = JSON.parse(JSON.stringify(DEFAULT_MESSAGES))
+
 
     try{
         
         //validação da chegada do ID
         if(!isNaN(id) && id != '' && id != null && id > 0){
-            let deleteFilmes = await filmeDAO.setDeleteMovies(Number(id))
+            let resultFilmes = await filmeDAO.setDeleteMovies(Number(id))
 
-            if(deleteFilmes){
-                if(deleteFilmes.length > 0){
-
-                    MESSAGES.DEFAULT_HEADER.status = MESSAGES.SUCCESS_REQUEST.status
-                    MESSAGES.DEFAULT_HEADER.status_code = MESSAGES.SUCCESS_REQUEST.status_code
-                    MESSAGES.DEFAULT_HEADER.items.filmes = deleteFilmes
+            if(resultFilmes){
+                if(resultFilmes > 0){
+                    
+                    MESSAGES.DEFAULT_HEADER.status      = MESSAGES.SUCCESS_DELETED_ITEM.status
+                    MESSAGES.DEFAULT_HEADER.status_code = MESSAGES.SUCCESS_DELETED_ITEM.status_code
+                    MESSAGES.DEFAULT_HEADER.message     = MESSAGES.SUCCESS_DELETED_ITEM.message
 
                     return MESSAGES.DEFAULT_HEADER
-
+                    
                 } else {
+
                     return MESSAGES.ERROR_NOT_FOUND //404
+                    
                 }
+                
             } else {
                 return MESSAGES.ERROR_INTERNAL_SERVER_MODEL //500
             }
@@ -263,6 +267,7 @@ const excluirFilme = async (id) => {
     }catch(error){
         return MESSAGES.ERROR_INTERNAL_SERVER_CONTROLLER //500
     }
+
 }
 
 module.exports = {

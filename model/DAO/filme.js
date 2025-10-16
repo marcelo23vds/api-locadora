@@ -151,17 +151,15 @@ const setDeleteMovies = async (id) => {
 
     try {
         //script SQL
-        let sql = `delete from tbl_filme where id=${id}`
+        let sql = `DELETE from tbl_filme where id=${id}`
 
         //encaminha para o BD o script SQL
-        let result = await prisma.$executeRawUnsafe(sql) 
+        let result = await prisma.$queryRawUnsafe(sql) 
 
-        if(Array.isArray(result))
-            return result
-        else
-            return false
+        return result
 
     } catch (error) {
+        //console.log(error)
         return false
     }
 

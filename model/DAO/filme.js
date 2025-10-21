@@ -86,6 +86,25 @@ const getSelectMoviesById = async (id) => {
 
 }
 
+//retorna o último ID gerado no DB
+const getSelectLastId = async () => {
+    try {
+        //script sql para retornar apenas o ultimo ID do DB
+        let sql = `select id from tbl_filme order by id desc limit 1;`
+
+        //encaminha para o DB o script SQL
+        let result = await prisma.$queryRawUnsafe(sql)
+
+        if(Array.isArray(result))
+            return Number(result[0].id)
+        else
+            return false
+
+    } catch (error) {
+        return false
+    }
+}
+
 //insere um filme novo no banco de dados
 const setInsertMovies = async (filme) => {
     try {
@@ -150,13 +169,17 @@ const setUpdateMovies = async (filme) => {
 const setDeleteMovies = async (id) => {
 
     try {
-        //script SQL
-        let sql = `DELETE from tbl_filme where id=${id}`
+        //Script SQL
+        let sql = `delete from tbl_filme where id=${id}`
+        
+        //Encaminha para o BD o srcipt SQL
+        let result = await prisma.$queryRawUnsafe(sql)
 
-        //encaminha para o BD o script SQL
-        let result = await prisma.$queryRawUnsafe(sql) 
-
-        return result
+        //console.log(Array.isArray(result))
+        if(Array.isArray(result))
+            return result
+        else
+            return false
 
     } catch (error) {
         //console.log(error)
@@ -168,6 +191,7 @@ const setDeleteMovies = async (id) => {
 module.exports = {
     getSelectAllMovies,
     getSelectMoviesById,
+    getSelectLastId,
     setInsertMovies,
     setUpdateMovies,
     setDeleteMovies

@@ -87,6 +87,7 @@ const getSelectMoviesById = async (id) => {
 }
 
 //retorna o último ID gerado no DB
+//sera utilizado para aparecer quando um filme for adicionado
 const getSelectLastId = async () => {
     try {
         //script sql para retornar apenas o ultimo ID do DB

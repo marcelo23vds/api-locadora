@@ -37,3 +37,12 @@ select * from tbl_filme;
 
 -- verificar apenas o ultimo filme adicionado na tabela
 select id from tbl_filme order by id desc limit 1;
+
+-- criar uma tabela no banco de dados
+CREATE TABLE  tbl_genero (
+    id_genero INT PRIMARY KEY AUTO_INCREMENT,
+	nome_genero VARCHAR(50) NOT NULL
+);
+
+-- inserir dados na tabela
+INSERT INTO tbl_genero (nome_genero) values('comedia');

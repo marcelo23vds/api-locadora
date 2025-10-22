@@ -46,3 +46,20 @@ CREATE TABLE  tbl_genero (
 
 -- inserir dados na tabela
 INSERT INTO tbl_genero (nome_genero) values('comedia');
+
+-- criar uma tabela no banco de dados
+CREATE TABLE  tbl_ator (
+    id_ator INT PRIMARY KEY AUTO_INCREMENT,
+	nome_ator VARCHAR(50) NOT NULL,
+    data_nascimento DATE NULL,
+    nacionalidade VARCHAR(30) NOT NULL,
+    biografia TEXT NULL
+);
+
+-- inserir dados na tabela
+INSERT INTO tbl_ator (nome_ator, data_nascimento, nacionalidade, biografia) 
+	values('Keanu Reeves',
+			'1964-09-02',
+            'Canadense',
+            'Keanu Reeves é um ator canadense conhecido por seus aclamados trabalhos no cinema, entre eles Matrix, John Wick e Velocidade Máxima. Ele nasceu em Beirut, mas morou em diversos lugares como Sydney, na Austrália, e Nova Iorque. Mas acabou sendo naturalizado canadense onde viveu a partir dos sete anos de idade. Ele começou a atuar ainda jovem no teatro local participando de algumas peças.'
+            );

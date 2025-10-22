@@ -33,6 +33,7 @@ app.use((request, response, next) => {
 //import das controllers
 const controllerFilme   = require('./controller/filme/controller_filme.js')
 const controllerGenero  = require('./controller/genero/controller_genero.js')
+const controllerAtor    = require('./controller/ator/controller_ator.js')
 
 
 //EndPoints para a rota de filme
@@ -165,6 +166,22 @@ app.delete('/v1/locadora/genero/delete/:id_genero', cors(), bodyParserJSON, asyn
     response.status(genero.status_code)
     response.json(genero)
 })
+
+
+//EndPoints para a rota de ator
+
+//retorna a lista de todos os atores
+app.get('/v1/locadora/ator', cors(), async (request, response) => {
+    //chama a função para listar os generos do DB
+    let ator = await controllerAtor.listarAtores()
+    
+    response.status(ator.status_code)
+    response.json(ator)
+})
+
+
+
+//EndPoints para a rota de diretor
 
 
 app.listen(PORT, () => {

@@ -179,9 +179,67 @@ app.get('/v1/locadora/ator', cors(), async (request, response) => {
     response.json(ator)
 })
 
+//retorna o ator filtrando pelo ID
+app.get('/v1/locadora/ator/:id_ator', cors(), async (request, response) => {
+
+    let idAtor = request.params.id_ator
+
+    let ator = await controllerAtor.buscarAtorId(idAtor)
+
+    response.status(ator.status_code)
+    response.json(ator)
+})
+
+//inserir um ator
+app.post('/v1/locadora/ator', cors(), bodyParserJSON, async (request, response) => {
+    //recebe os dados do body da requisição (se você utilizar o bodyParser, é obrigatório ter no endPoint)
+    let dadosBody = request.body
+
+    //recebe o tipo de dados da requisição (JSON ou XML ou ...)
+    let contentType = request.headers['content-type']
+
+    //chama a função da controller para inserir o novo filme, encaminha os dados e o content-type
+    let ator = await controllerAtor.inserirAtor(dadosBody, contentType)
+
+    response.status(ator.status_code)
+    response.json(ator)
+
+})
+
+//atualizar um ator
+app.put('/v1/locadora/ator/:id_ator', cors(), bodyParserJSON, async (request, response) => {
+    //recebe o id do ator
+    let idAtor = request.params.id_ator
+    //recebe os dados a serem atualizados
+    let dadosBody = request.body
+    //recebe content-type da requisição
+    let contentType = request.headers['content-type']
+
+    //chama a função para atualizar o filme e encaminha os dados, o id e o content-type
+    let ator = await controllerAtor.atualizarAtor(dadosBody, idAtor, contentType)
+
+    response.status(ator.status_code)
+    response.json(ator)
+})
+
+//excluir um ator
+app.delete('/v1/locadora/ator/delete/:id_ator', cors(), bodyParserJSON, async (request, response) => {
+
+    let idAtor = request.params.id_ator
+
+    let ator = await controllerAtor.excluirAtor(idAtor)
+
+    response.status(ator.status_code)
+    response.json(ator)
+})
 
 
 //EndPoints para a rota de diretor
+
+
+
+//EndPoints para a rota de roteirista
+
 
 
 app.listen(PORT, () => {

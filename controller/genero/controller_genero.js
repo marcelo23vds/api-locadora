@@ -80,7 +80,7 @@ const buscarGeneroId = async (id_genero) => {
 
                     MESSAGES.DEFAULT_HEADER.status = MESSAGES.SUCCESS_REQUEST.status
                     MESSAGES.DEFAULT_HEADER.status_code = MESSAGES.SUCCESS_REQUEST.status_code
-                    MESSAGES.DEFAULT_HEADER.items.filmes = resultGeneros
+                    MESSAGES.DEFAULT_HEADER.items.genero = resultGeneros
 
                     return MESSAGES.DEFAULT_HEADER
 

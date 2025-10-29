@@ -1,6 +1,6 @@
 /******************************************************************************
-* Objetivo: Arquivo responsavel pelo CRUD de dados no MySQL referente ao ator
-* Data: 22/10/2025
+* Objetivo: Arquivo responsavel pelo CRUD de dados no MySQL referente ao diretor
+* Data: 29/10/2025
 * Autor: Marcelo Vieira
 * Versão: 1.0
 ******************************************************************************/
@@ -11,11 +11,12 @@ const { PrismaClient } = require('../../generated/prisma')
 //cria um novo objeto baseado na classe do PrismaClient
 const prisma = new PrismaClient()
 
+
 //listar todos os diretores de filme
-const getSelectAllActors = async () => {
+const getSelectAllDirectors = async () => {
     try {
         //script SQL
-        let sql = `SELECT * FROM tbl_ator ORDER BY id_ator DESC`
+        let sql = `SELECT * FROM tbl_diretor ORDER BY id_diretor DESC`
 
         //encaminha para o BD o script SQL
         let result = await prisma.$queryRawUnsafe(sql) 
@@ -31,11 +32,11 @@ const getSelectAllActors = async () => {
 
 }
 
-//buscar os atores pelo ID
-const getSelectActorsById = async (id_ator) => {
+//buscar os diretores pelo ID
+const getSelectDirectorsById = async (id_diretor) => {
     try {
         //script SQL
-        let sql = `SELECT * FROM tbl_ator WHERE id_ator=${id_ator}`
+        let sql = `SELECT * FROM tbl_diretor WHERE id_diretor=${id_diretor}`
 
         //encaminha para o BD o script SQL
         let result = await prisma.$queryRawUnsafe(sql) 
@@ -50,18 +51,18 @@ const getSelectActorsById = async (id_ator) => {
     }
 }
 
-//retornar o ultimo ator adicionado
-//sera utilizado para aparecer quando um ator for adicionado
+//retornar o ultimo diretor adicionado
+//sera utilizado para aparecer quando um diretor for adicionado
 const getSelectLastId = async () => {
     try {
         //script sql para retornar apenas o ultimo ID do DB
-        let sql = `select id_ator from tbl_ator order by id_ator desc limit 1;`
+        let sql = `select id_diretor from tbl_diretor order by id_diretor desc limit 1;`
 
         //encaminha para o DB o script SQL
         let result = await prisma.$queryRawUnsafe(sql)
 
         if(Array.isArray(result))
-            return Number(result[0].id_ator)
+            return Number(result[0].id_diretor)
         else
             return false
 
@@ -70,18 +71,18 @@ const getSelectLastId = async () => {
     }
 }
 
-//insere um ator novo no banco de dados
-const setInsertActors = async (ator) => {
+//insere um diretor novo no banco de dados
+const setInsertDirectors = async (diretor) => {
     try {
         
-        let sql = `INSERT INTO tbl_ator ( nome_ator,
-						data_nascimento,
+        let sql = `INSERT INTO tbl_diretor ( nome_diretor,
+                        data_nascimento,
                         nacionalidade,
                         biografia)
-					values( '${ator.nome_ator}',
-							'${ator.data_nascimento}',
-                            '${ator.nacionalidade}',
-                            '${ator.biografia}')`
+                    values( '${diretor.nome_diretor}',
+                            '${diretor.data_nascimento}',
+                            '${diretor.nacionalidade}',
+                            '${diretor.biografia}')`
 
         //executeRawUnsafe() -> executa o script SQL que não tem retorno de valores
         let result = await prisma.$executeRawUnsafe(sql)
@@ -96,16 +97,16 @@ const setInsertActors = async (ator) => {
     }
 }
 
-//altera um ator pelo ID no banco de dados
-const setUpdateActors = async (ator) => {
+//altera um diretor pelo ID no banco de dados
+const setUpdateDirectors = async (diretor) => {
     try {
         
-        let sql = `UPDATE tbl_ator SET
-                        nome_ator       = '${ator.nome_ator}',
-						data_nascimento = '${ator.data_nascimento}',
-                        nacionalidade   = '${ator.nacionalidade}',
-                        biografia       = '${ator.biografia}'
-                    WHERE id_ator = ${ator.id_ator}`
+        let sql = `UPDATE tbl_diretor SET
+                        nome_diretor    = '${diretor.nome_diretor}',
+                        data_nascimento = '${diretor.data_nascimento}',
+                        nacionalidade   = '${diretor.nacionalidade}',
+                        biografia       = '${diretor.biografia}'
+                    WHERE id_diretor = ${diretor.id_diretor}`
 
         //executeRawUnsafe() -> executa o script SQL que não tem retorno de valores
         let result = await prisma.$executeRawUnsafe(sql)
@@ -120,11 +121,11 @@ const setUpdateActors = async (ator) => {
     }
 }
 
-//exclui um ator pelo ID no banco de dados
-const setDeleteActors = async (id_ator) => {
+//exclui um diretor pelo ID no banco de dados
+const setDeleteDirectors = async (id_diretor) => {
     try {
         //Script SQL
-        let sql = `DELETE FROM tbl_ator WHERE id_ator=${id_ator}`
+        let sql = `DELETE FROM tbl_diretor WHERE id_diretor=${id_diretor}`
         
         //Encaminha para o BD o srcipt SQL
         let result = await prisma.$queryRawUnsafe(sql)
@@ -140,10 +141,10 @@ const setDeleteActors = async (id_ator) => {
 }
 
 module.exports = {
-    getSelectAllActors,
-    getSelectActorsById,
+    getSelectAllDirectors,
+    getSelectDirectorsById,
     getSelectLastId,
-    setInsertActors,
-    setUpdateActors,
-    setDeleteActors
+    setInsertDirectors,
+    setUpdateDirectors,
+    setDeleteDirectors
 }

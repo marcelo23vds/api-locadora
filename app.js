@@ -34,6 +34,7 @@ app.use((request, response, next) => {
 const controllerFilme   = require('./controller/filme/controller_filme.js')
 const controllerGenero  = require('./controller/genero/controller_genero.js')
 const controllerAtor    = require('./controller/ator/controller_ator.js')
+const controllerDiretor = require('./controller/diretor/controller_diretor.js')
 
 
 //EndPoints para a rota de filme
@@ -236,11 +237,71 @@ app.delete('/v1/locadora/ator/delete/:id_ator', cors(), bodyParserJSON, async (r
 
 //EndPoints para a rota de diretor
 
+//retorna a lista de todos os diretores
+app.get('/v1/locadora/diretor', cors(), async (request, response) => {
+    //chama a função para listar os generos do DB
+    let diretor = await controllerDiretor.listarDiretores()
+    
+    response.status(diretor.status_code)
+    response.json(diretor)
+})
+
+//retorna o diretor filtrando pelo ID
+app.get('/v1/locadora/diretor/:id_diretor', cors(), async (request, response) => {
+
+    let idDiretor = request.params.id_diretor
+
+    let diretor = await controllerDiretor.buscarDiretorId(idDiretor)
+
+    response.status(diretor.status_code)
+    response.json(diretor)
+})
+
+//inserir um diretor
+app.post('/v1/locadora/diretor', cors(), bodyParserJSON, async (request, response) => {
+    //recebe os dados do body da requisição (se você utilizar o bodyParser, é obrigatório ter no endPoint)
+    let dadosBody = request.body
+
+    //recebe o tipo de dados da requisição (JSON ou XML ou ...)
+    let contentType = request.headers['content-type']
+
+    //chama a função da controller para inserir o novo filme, encaminha os dados e o content-type
+    let diretor = await controllerDiretor.inserirDiretor(dadosBody, contentType)
+
+    response.status(diretor.status_code)
+    response.json(diretor)
+
+})
+
+//atualizar um diretor
+app.put('/v1/locadora/diretor/:id_diretor', cors(), bodyParserJSON, async (request, response) => {
+    //recebe o id do ator
+    let idDiretor = request.params.id_diretor
+    //recebe os dados a serem atualizados
+    let dadosBody = request.body
+    //recebe content-type da requisição
+    let contentType = request.headers['content-type']
+
+    //chama a função para atualizar o filme e encaminha os dados, o id e o content-type
+    let diretor = await controllerDiretor.atualizarDiretor(dadosBody, idDiretor, contentType)
+
+    response.status(diretor.status_code)
+    response.json(diretor)
+})
+
+//excluir um diretor
+app.delete('/v1/locadora/diretor/delete/:id_diretor', cors(), bodyParserJSON, async (request, response) => {
+
+    let idDiretor = request.params.id_diretor
+
+    let diretor = await controllerDiretor.excluirDiretor(idDiretor)
+
+    response.status(diretor.status_code)
+    response.json(diretor)
+})
 
 
 //EndPoints para a rota de roteirista
-
-
 
 app.listen(PORT, () => {
     console.log('API aguardando requisições...')

@@ -7,7 +7,6 @@
 
 //import da model do DAO do genero
 const generoDAO = require('../../model/DAO/genero.js')
-const { buscarFilmeId } = require('../filme/controller_filme.js')
 
 //import do arquivo de mensagens
 const DEFAULT_MESSAGES = require('../modulo/config_messages.js')
@@ -220,7 +219,7 @@ const excluirGenero = async (id_genero) => {
         if(!isNaN(id_genero) && id_genero != '' && id_genero != null && id_genero > 0){
 
             //Validação de ID válido, chama a função da controller que verifica no BD se o ID existe e valida o ID
-            let validarID = await buscarFilmeId(id_genero)
+            let validarID = await buscarGeneroId(id_genero)
 
             if(validarID.status_code == 200){
 

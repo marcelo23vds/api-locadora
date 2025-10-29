@@ -1,25 +1,25 @@
 /* *********************************************************************
-* Objetivo: Arquivo responsavel pela manipulação de dados entre o APP e a MODEL para o CRUD de atores
-* Data: 22/10/2025
+* Objetivo: Arquivo responsavel pela manipulação de dados entre o APP e a MODEL para o CRUD de diretores
+* Data: 29/10/2025
 * Autor: Marcelo Vieira
 * Versão: 1.0
 * **********************************************************************/
 
-//import da model do DAO do ator
-const atorDAO = require('../../model/DAO/ator.js')
+//import da model do DAO do diretor
+const diretorDAO = require('../../model/DAO/diretor.js')
 
 //import do arquivo de mensagens
 const DEFAULT_MESSAGES = require('../modulo/config_messages.js')
 
 //FUNÇÃO DE APOIO
-//validação dos dados de cadastro e atualização do ator
-const validarDadosAtor = async (ator) => {
+//validação dos dados de cadastro e atualização do Diretor
+const validarDadosDiretor = async (diretor) => {
 
     //criando um objeto novo para as mensagens
     let MESSAGES = JSON.parse(JSON.stringify(DEFAULT_MESSAGES))
             
     //validações de todas as entradas de dados    
-    if (ator.nome_ator == '' || ator.nome_ator == undefined || ator.nome_ator == null || ator.nome_ator.length > 50){
+    if (diretor.nome_diretor == '' || diretor.nome_diretor == undefined || diretor.nome_diretor == null || diretor.nome_diretor.length > 50){
                       
         MESSAGES.ERROR_REQUIRED_FIELDS.message += '[Nome inválido]'   
         return MESSAGES.ERROR_REQUIRED_FIELDS
@@ -32,22 +32,22 @@ const validarDadosAtor = async (ator) => {
 
 //FUNÇÕES PRINCIPAIS
 
-//retorna uma lista de todos os atores
-const listarAtores = async () => {
+//retorna uma lista de todos os diretores
+const listarDiretores = async () => {
 
     //criando um objeto novo para as mensagens
     let MESSAGES = JSON.parse(JSON.stringify(DEFAULT_MESSAGES))
 
     try {
     
-        //chama a função do DAO para retornar a lista de Atores do DB
-        let resultAtores = await atorDAO.getSelectAllActors()
+        //chama a função do DAO para retornar a lista de diretores do DB
+        let resultDiretores = await diretorDAO.getSelectAllDirectors()
 
-        if(resultAtores){
-            if(resultAtores.length > 0){
+        if(resultDiretores){
+            if(resultDiretores.length > 0){
                 MESSAGES.DEFAULT_HEADER.status          = MESSAGES.SUCCESS_REQUEST.status
                 MESSAGES.DEFAULT_HEADER.status_code     = MESSAGES.SUCCESS_REQUEST.status_code
-                MESSAGES.DEFAULT_HEADER.items.atores   = resultAtores
+                MESSAGES.DEFAULT_HEADER.items.diretores   = resultDiretores
 
                 return MESSAGES.DEFAULT_HEADER //200
             } else {
@@ -61,8 +61,8 @@ const listarAtores = async () => {
     }
 }
 
-//retorna um ator filtrando pelo ID
-const buscarAtorId = async (id_ator) => {
+//retorna um diretor filtrando pelo ID
+const buscarDiretorId = async (id_diretor) => {
     
     //criando um objeto novo para as mensagens
     let MESSAGES = JSON.parse(JSON.stringify(DEFAULT_MESSAGES))
@@ -71,15 +71,15 @@ const buscarAtorId = async (id_ator) => {
     try{
         
         //validação da chegada do ID
-        if(!isNaN(id_ator) && id_ator != '' && id_ator != null && id_ator > 0){
-            let resultAtores = await atorDAO.getSelectActorsById(Number(id_ator))
+        if(!isNaN(id_diretor) && id_diretor != '' && id_diretor != null && id_diretor > 0){
+            let resultDiretores = await diretorDAO.getSelectDirectorsById(Number(id_diretor))
 
-            if(resultAtores){
-                if(resultAtores.length > 0){
+            if(resultDiretores){
+                if(resultDiretores.length > 0){
 
                     MESSAGES.DEFAULT_HEADER.status = MESSAGES.SUCCESS_REQUEST.status
                     MESSAGES.DEFAULT_HEADER.status_code = MESSAGES.SUCCESS_REQUEST.status_code
-                    MESSAGES.DEFAULT_HEADER.items.atores = resultAtores
+                    MESSAGES.DEFAULT_HEADER.items.diretores = resultDiretores
 
                     return MESSAGES.DEFAULT_HEADER
 
@@ -100,36 +100,36 @@ const buscarAtorId = async (id_ator) => {
     }
 }
 
-//insere um ator
-const inserirAtor = async (ator, contentType) => {
+//insere um diretor
+const inserirDiretor = async (diretor, contentType) => {
 
     //criando um objeto novo para as mensagens
     let MESSAGES = JSON.parse(JSON.stringify(DEFAULT_MESSAGES))
 
     try{
 
-        //validação do tipo de conteudo da requisição (obrigatorio ser um json)
+        //validação do tipo de conteudo da requisição (obrigDiretorio ser um json)
         if (String(contentType).toUpperCase() == 'APPLICATION/JSON'){
 
             //chama funcao de validar todos os filmes
-            let validar = await validarDadosAtor(ator)
+            let validar = await validarDadosDiretor(diretor)
 
             if(!validar){
 
                 //processamento
-                //chama a função para inserir um novo ator no DB
-                let resultAtores = await atorDAO.setInsertActors(ator)
+                //chama a função para inserir um novo diretor no DB
+                let resultDiretores = await diretorDAO.setInsertDirectors(diretor)
 
-                if (resultAtores){
+                if (resultDiretores){
                     //chama a função para receber o ID gerado no DB
-                    let lastID = await atorDAO.getSelectLastId()
+                    let lastID = await diretorDAO.getSelectLastId()
                     if(lastID){
                         //adiciona o ID no JSON com os dados do genero
-                        ator.id_ator = lastID
+                        diretor.id_diretor = lastID
                         MESSAGES.DEFAULT_HEADER.status      = MESSAGES.SUCCESS_CREATED_ITEM.status
                         MESSAGES.DEFAULT_HEADER.status_code = MESSAGES.SUCCESS_CREATED_ITEM.status_code
                         MESSAGES.DEFAULT_HEADER.message     = MESSAGES.SUCCESS_CREATED_ITEM.message
-                        MESSAGES.DEFAULT_HEADER.items       = ator
+                        MESSAGES.DEFAULT_HEADER.items       = diretor
 
                         return MESSAGES.DEFAULT_HEADER //201
                     } else {
@@ -153,37 +153,37 @@ const inserirAtor = async (ator, contentType) => {
     }
 }
 
-//atualiza um ator buscando pelo id
-const atualizarAtor = async (ator, id_ator, contentType) => {
+//atualiza um diretor buscando pelo id
+const atualizarDiretor = async (diretor, id_diretor, contentType) => {
   //criando um objeto novo para as mensagens
   let MESSAGES = JSON.parse(JSON.stringify(DEFAULT_MESSAGES))
 
     try{
 
-        //validação do tipo de conteudo da requisição (obrigatorio ser um json)
+        //validação do tipo de conteudo da requisição (obrigDiretorio ser um json)
         if (String(contentType).toUpperCase() == 'APPLICATION/JSON'){
 
                 //chama funcao de validar todos os filmes
-                let validar = await validarDadosAtor(ator)
+                let validar = await validarDadosDiretor(diretor)
 
                 if(!validar){
    
                     //validação de ID válido, chama a função da controller que verifica no DB se o ID existe e valida o ID
-                    let validarID = await buscarAtorId(id_ator)
+                    let validarID = await buscarDiretorId(id_diretor)
 
                     if(validarID.status_code == 200){
                     
                         //adiciona o id do filme no json de dados para ser encaminhado ao DAO
-                        ator.id_ator = Number(id_ator)
+                        diretor.id_diretor = Number(id_diretor)
 
-                        //chama a função para inserir um novo ator no DB
-                        let resultAtores = await atorDAO.setUpdateActors(ator)
+                        //chama a função para inserir um novo diretor no DB
+                        let resultDiretores = await diretorDAO.setUpdateDirectors(diretor)
 
-                        if (resultAtores){
+                        if (resultDiretores){
                             MESSAGES.DEFAULT_HEADER.status          = MESSAGES.SUCCESS_UPDATED_ITEM.status
                             MESSAGES.DEFAULT_HEADER.status_code     = MESSAGES.SUCCESS_UPDATED_ITEM.status_code
                             MESSAGES.DEFAULT_HEADER.message         = MESSAGES.SUCCESS_UPDATED_ITEM.message
-                            MESSAGES.DEFAULT_HEADER.items.ator      = ator
+                            MESSAGES.DEFAULT_HEADER.items.diretor   = diretor
 
                             return MESSAGES.DEFAULT_HEADER //200
                         } else {
@@ -203,13 +203,12 @@ const atualizarAtor = async (ator, id_ator, contentType) => {
         }
 
     } catch (error) {
-        console.log(error)
         return MESSAGES.ERROR_INTERNAL_SERVER_CONTROLLER //500
     }
 }
 
-//exclui um ator buscando pelo id
-const excluirAtor = async (id_ator) => {
+//exclui um Diretor buscando pelo id
+const excluirDiretor = async (id_diretor) => {
 
     //Criando um objeto novo para as mensagens
     let MESSAGES = JSON.parse(JSON.stringify(DEFAULT_MESSAGES))
@@ -217,21 +216,21 @@ const excluirAtor = async (id_ator) => {
     try {
 
         //Validação da chegada do ID
-        if(!isNaN(id_ator) && id_ator != '' && id_ator != null && id_ator > 0){
+        if(!isNaN(id_diretor) && id_diretor != '' && id_diretor != null && id_diretor > 0){
 
             //Validação de ID válido, chama a função da controller que verifica no BD se o ID existe e valida o ID
-            let validarID = await buscarAtorId(id_ator)
+            let validarID = await buscarDiretorId(id_diretor)
 
             if(validarID.status_code == 200){
 
-                let resultAtores = await atorDAO.setDeleteActors(Number(id_ator))
+                let resultDiretores = await diretorDAO.setDeleteDirectors(Number(id_diretor))
 
-                if(resultAtores){
+                if(resultDiretores){
                     
                         MESSAGES.DEFAULT_HEADER.status      = MESSAGES.SUCCESS_DELETED_ITEM.status
                         MESSAGES.DEFAULT_HEADER.status_code = MESSAGES.SUCCESS_DELETED_ITEM.status_code
                         MESSAGES.DEFAULT_HEADER.message     = MESSAGES.SUCCESS_DELETED_ITEM.message
-                        MESSAGES.DEFAULT_HEADER.items.ator = resultAtores
+                        MESSAGES.DEFAULT_HEADER.items.diretor = resultDiretores
                         delete MESSAGES.DEFAULT_HEADER.items
                         return MESSAGES.DEFAULT_HEADER //200
             
@@ -254,9 +253,9 @@ const excluirAtor = async (id_ator) => {
 }
 
 module.exports = {
-    listarAtores,
-    buscarAtorId,
-    inserirAtor,
-    atualizarAtor,
-    excluirAtor
+    listarDiretores,
+    buscarDiretorId,
+    inserirDiretor,
+    atualizarDiretor,
+    excluirDiretor
 }

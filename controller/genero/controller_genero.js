@@ -111,7 +111,7 @@ const inserirGenero = async (genero, contentType) => {
         //validação do tipo de conteudo da requisição (obrigatorio ser um json)
         if (String(contentType).toUpperCase() == 'APPLICATION/JSON'){
 
-            //chama funcao de validar todos os filmes
+            //chama funcao de validar todos os generos
             let validar = await validarDadosGenero(genero)
 
             if(!validar){

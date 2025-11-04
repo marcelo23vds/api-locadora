@@ -35,6 +35,7 @@ const controllerFilme   = require('./controller/filme/controller_filme.js')
 const controllerGenero  = require('./controller/genero/controller_genero.js')
 const controllerAtor    = require('./controller/ator/controller_ator.js')
 const controllerDiretor = require('./controller/diretor/controller_diretor.js')
+const controllerRoteirista = require('./controller/roteirista/controller_roteirista.js')
 
 
 //EndPoints para a rota de filme
@@ -239,7 +240,7 @@ app.delete('/v1/locadora/ator/delete/:id_ator', cors(), bodyParserJSON, async (r
 
 //retorna a lista de todos os diretores
 app.get('/v1/locadora/diretor', cors(), async (request, response) => {
-    //chama a função para listar os generos do DB
+    //chama a função para listar os diretores do DB
     let diretor = await controllerDiretor.listarDiretores()
     
     response.status(diretor.status_code)
@@ -302,6 +303,69 @@ app.delete('/v1/locadora/diretor/delete/:id_diretor', cors(), bodyParserJSON, as
 
 
 //EndPoints para a rota de roteirista
+
+//retorna a lista de todos os roteiristas
+app.get('/v1/locadora/roteirista', cors(), async (request, response) => {
+    //chama a função para listar os roteiristas do DB
+    let roteirista = await controllerRoteirista.listarRoteiristas()
+    
+    response.status(roteirista.status_code)
+    response.json(roteirista)
+})
+
+//retorna o roteirista filtrando pelo ID
+app.get('/v1/locadora/roteirista/:id_roteirista', cors(), async (request, response) => {
+
+    let idRoteirista = request.params.id_roteirista
+
+    let roteirista = await controllerRoteirista.buscarRoteiristaId(idRoteirista)
+
+    response.status(roteirista.status_code)
+    response.json(roteirista)
+})
+
+//inserir um roteirista
+app.post('/v1/locadora/roteirista', cors(), bodyParserJSON, async (request, response) => {
+    //recebe os dados do body da requisição (se você utilizar o bodyParser, é obrigatório ter no endPoint)
+    let dadosBody = request.body
+
+    //recebe o tipo de dados da requisição (JSON ou XML ou ...)
+    let contentType = request.headers['content-type']
+
+    //chama a função da controller para inserir o novo filme, encaminha os dados e o content-type
+    let roteirista = await controllerRoteirista.inserirRoteirista(dadosBody, contentType)
+
+    response.status(roteirista.status_code)
+    response.json(roteirista)
+
+})
+
+//atualizar um roteirista
+app.put('/v1/locadora/roteirista/:id_roteirista', cors(), bodyParserJSON, async (request, response) => {
+    //recebe o id do ator
+    let idRoteirista = request.params.id_roteirista
+    //recebe os dados a serem atualizados
+    let dadosBody = request.body
+    //recebe content-type da requisição
+    let contentType = request.headers['content-type']
+
+    //chama a função para atualizar o filme e encaminha os dados, o id e o content-type
+    let roteirista = await controllerRoteirista.atualizarRoteirista(dadosBody, idRoteirista, contentType)
+
+    response.status(roteirista.status_code)
+    response.json(roteirista)
+})
+
+//excluir um roteirista
+app.delete('/v1/locadora/roteirista/delete/:id_roteirista', cors(), bodyParserJSON, async (request, response) => {
+
+    let idRoteirista = request.params.id_roteirista
+
+    let roteirista = await controllerRoteirista.excluirRoteirista(idRoteirista)
+
+    response.status(roteirista.status_code)
+    response.json(roteirista)
+})
 
 app.listen(PORT, () => {
     console.log('API aguardando requisições...')

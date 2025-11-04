@@ -1,25 +1,25 @@
 /* *********************************************************************
-* Objetivo: Arquivo responsavel pela manipulação de dados entre o APP e a MODEL para o CRUD de atores
-* Data: 22/10/2025
+* Objetivo: Arquivo responsavel pela manipulação de dados entre o APP e a MODEL para o CRUD de roteiristas
+* Data: 03/11/2025
 * Autor: Marcelo Vieira
 * Versão: 1.0
 * **********************************************************************/
 
-//import da model do DAO do ator
-const atorDAO = require('../../model/DAO/ator.js')
+//import da model do DAO do roteirista
+const roteiristaDAO = require('../../model/DAO/roteirista.js')
 
 //import do arquivo de mensagens
 const DEFAULT_MESSAGES = require('../modulo/config_messages.js')
 
 //FUNÇÃO DE APOIO
-//validação dos dados de cadastro e atualização do ator
-const validarDadosAtor = async (ator) => {
+//validação dos dados de cadastro e atualização do roteirista
+const validarDadosRoteirista = async (roteirista) => {
 
     //criando um objeto novo para as mensagens
     let MESSAGES = JSON.parse(JSON.stringify(DEFAULT_MESSAGES))
             
     //validações de todas as entradas de dados    
-    if (ator.nome_ator == '' || ator.nome_ator == undefined || ator.nome_ator == null || ator.nome_ator.length > 50){
+    if (roteirista.nome_roteirista == '' || roteirista.nome_roteirista == undefined || roteirista.nome_roteirista == null || roteirista.nome_roteirista.length > 50){
                       
         MESSAGES.ERROR_REQUIRED_FIELDS.message += '[Nome inválido]'   
         return MESSAGES.ERROR_REQUIRED_FIELDS
@@ -32,22 +32,22 @@ const validarDadosAtor = async (ator) => {
 
 //FUNÇÕES PRINCIPAIS
 
-//retorna uma lista de todos os atores
-const listarAtores = async () => {
+//retorna uma lista de todos os roteirista
+const listarRoteiristas = async () => {
 
     //criando um objeto novo para as mensagens
     let MESSAGES = JSON.parse(JSON.stringify(DEFAULT_MESSAGES))
 
     try {
     
-        //chama a função do DAO para retornar a lista de Atores do DB
-        let resultAtores = await atorDAO.getSelectAllActors()
+        //chama a função do DAO para retornar a lista de roteiristas do DB
+        let resultRoteirista = await roteiristaDAO.getSelectAllScreenwriters()
 
-        if(resultAtores){
-            if(resultAtores.length > 0){
+        if(resultRoteirista){
+            if(resultRoteirista.length > 0){
                 MESSAGES.DEFAULT_HEADER.status          = MESSAGES.SUCCESS_REQUEST.status
                 MESSAGES.DEFAULT_HEADER.status_code     = MESSAGES.SUCCESS_REQUEST.status_code
-                MESSAGES.DEFAULT_HEADER.items.atores   = resultAtores
+                MESSAGES.DEFAULT_HEADER.items.roteiristas   = resultRoteirista
 
                 return MESSAGES.DEFAULT_HEADER //200
             } else {
@@ -61,8 +61,8 @@ const listarAtores = async () => {
     }
 }
 
-//retorna um ator filtrando pelo ID
-const buscarAtorId = async (id_ator) => {
+//retorna um roteirista filtrando pelo ID
+const buscarRoteiristaId = async (id_roteirista) => {
     
     //criando um objeto novo para as mensagens
     let MESSAGES = JSON.parse(JSON.stringify(DEFAULT_MESSAGES))
@@ -71,15 +71,15 @@ const buscarAtorId = async (id_ator) => {
     try{
         
         //validação da chegada do ID
-        if(!isNaN(id_ator) && id_ator != '' && id_ator != null && id_ator > 0){
-            let resultAtores = await atorDAO.getSelectActorsById(Number(id_ator))
+        if(!isNaN(id_roteirista) && id_roteirista != '' && id_roteirista != null && id_roteirista > 0){
+            let resultRoteirista = await roteiristaDAO.getSelectScreenwritersById(Number(id_roteirista))
 
-            if(resultAtores){
-                if(resultAtores.length > 0){
+            if(resultRoteirista){
+                if(resultRoteirista.length > 0){
 
                     MESSAGES.DEFAULT_HEADER.status = MESSAGES.SUCCESS_REQUEST.status
                     MESSAGES.DEFAULT_HEADER.status_code = MESSAGES.SUCCESS_REQUEST.status_code
-                    MESSAGES.DEFAULT_HEADER.items.atores = resultAtores
+                    MESSAGES.DEFAULT_HEADER.items.roteiristas = resultRoteirista
 
                     return MESSAGES.DEFAULT_HEADER
 
@@ -100,8 +100,8 @@ const buscarAtorId = async (id_ator) => {
     }
 }
 
-//insere um ator
-const inserirAtor = async (ator, contentType) => {
+//insere um roteirista
+const inserirRoteirista = async (roteirista, contentType) => {
 
     //criando um objeto novo para as mensagens
     let MESSAGES = JSON.parse(JSON.stringify(DEFAULT_MESSAGES))
@@ -111,25 +111,25 @@ const inserirAtor = async (ator, contentType) => {
         //validação do tipo de conteudo da requisição (obrigatorio ser um json)
         if (String(contentType).toUpperCase() == 'APPLICATION/JSON'){
 
-            //chama funcao de validar todos os filmes
-            let validar = await validarDadosAtor(ator)
+            //chama funcao de validar todos os roteiristas
+            let validar = await validarDadosRoteirista(roteirista)
 
             if(!validar){
 
                 //processamento
-                //chama a função para inserir um novo ator no DB
-                let resultAtores = await atorDAO.setInsertActors(ator)
+                //chama a função para inserir um novo roteirista no DB
+                let resultRoteirista = await roteiristaDAO.setInsertScreenwriters(roteirista)
 
-                if (resultAtores){
+                if (resultRoteirista){
                     //chama a função para receber o ID gerado no DB
-                    let lastID = await atorDAO.getSelectLastId()
+                    let lastID = await roteiristaDAO.getSelectLastId()
                     if(lastID){
-                        //adiciona o ID no JSON com os dados do genero
-                        ator.id_ator = lastID
+                        //adiciona o ID no JSON com os dados do roteirista
+                        roteirista.id_roteirista = lastID
                         MESSAGES.DEFAULT_HEADER.status      = MESSAGES.SUCCESS_CREATED_ITEM.status
                         MESSAGES.DEFAULT_HEADER.status_code = MESSAGES.SUCCESS_CREATED_ITEM.status_code
                         MESSAGES.DEFAULT_HEADER.message     = MESSAGES.SUCCESS_CREATED_ITEM.message
-                        MESSAGES.DEFAULT_HEADER.items       = ator
+                        MESSAGES.DEFAULT_HEADER.items       = roteirista
 
                         return MESSAGES.DEFAULT_HEADER //201
                     } else {
@@ -153,37 +153,36 @@ const inserirAtor = async (ator, contentType) => {
     }
 }
 
-//atualiza um ator buscando pelo id
-const atualizarAtor = async (ator, id_ator, contentType) => {
+//atualiza um roteirista buscando pelo id
+const atualizarRoteirista = async (roteirista, id_roteirista, contentType) => {
   //criando um objeto novo para as mensagens
   let MESSAGES = JSON.parse(JSON.stringify(DEFAULT_MESSAGES))
 
     try{
-
         //validação do tipo de conteudo da requisição (obrigatorio ser um json)
         if (String(contentType).toUpperCase() == 'APPLICATION/JSON'){
 
-                //chama funcao de validar todos os atores
-                let validar = await validarDadosAtor(ator)
+                //chama funcao de validar todos os roteiristas
+                let validar = await validarDadosRoteirista(roteirista)
 
                 if(!validar){
    
                     //validação de ID válido, chama a função da controller que verifica no DB se o ID existe e valida o ID
-                    let validarID = await buscarAtorId(id_ator)
+                    let validarID = await buscarRoteiristaId(id_roteirista)
 
                     if(validarID.status_code == 200){
                     
                         //adiciona o id do filme no json de dados para ser encaminhado ao DAO
-                        ator.id_ator = Number(id_ator)
+                        roteirista.id_roteirista = Number(id_roteirista)
 
-                        //chama a função para inserir um novo ator no DB
-                        let resultAtores = await atorDAO.setUpdateActors(ator)
+                        //chama a função para inserir um novo roteirista no DB
+                        let resultRoteirista = await roteiristaDAO.setUpdateScreenwriters(roteirista)
 
-                        if (resultAtores){
-                            MESSAGES.DEFAULT_HEADER.status          = MESSAGES.SUCCESS_UPDATED_ITEM.status
-                            MESSAGES.DEFAULT_HEADER.status_code     = MESSAGES.SUCCESS_UPDATED_ITEM.status_code
-                            MESSAGES.DEFAULT_HEADER.message         = MESSAGES.SUCCESS_UPDATED_ITEM.message
-                            MESSAGES.DEFAULT_HEADER.items.ator      = ator
+                        if (resultRoteirista){
+                            MESSAGES.DEFAULT_HEADER.status              = MESSAGES.SUCCESS_UPDATED_ITEM.status
+                            MESSAGES.DEFAULT_HEADER.status_code         = MESSAGES.SUCCESS_UPDATED_ITEM.status_code
+                            MESSAGES.DEFAULT_HEADER.message             = MESSAGES.SUCCESS_UPDATED_ITEM.message
+                            MESSAGES.DEFAULT_HEADER.items.roteirista    = roteirista
 
                             return MESSAGES.DEFAULT_HEADER //200
                         } else {
@@ -191,7 +190,7 @@ const atualizarAtor = async (ator, id_ator, contentType) => {
                         }
 
                     } else {
-                        return validarID //a função buscarGeneroId poderá retornar -> 400, 404 ou 500
+                        return validarID //a função buscarRoteiristaId poderá retornar -> 400, 404 ou 500
                     }
 
                 } else {
@@ -203,13 +202,12 @@ const atualizarAtor = async (ator, id_ator, contentType) => {
         }
 
     } catch (error) {
-        console.log(error)
         return MESSAGES.ERROR_INTERNAL_SERVER_CONTROLLER //500
     }
 }
 
-//exclui um ator buscando pelo id
-const excluirAtor = async (id_ator) => {
+//exclui um roteirista buscando pelo id
+const excluirRoteirista = async (id_roteirista) => {
 
     //Criando um objeto novo para as mensagens
     let MESSAGES = JSON.parse(JSON.stringify(DEFAULT_MESSAGES))
@@ -217,21 +215,21 @@ const excluirAtor = async (id_ator) => {
     try {
 
         //Validação da chegada do ID
-        if(!isNaN(id_ator) && id_ator != '' && id_ator != null && id_ator > 0){
+        if(!isNaN(id_roteirista) && id_roteirista != '' && id_roteirista != null && id_roteirista > 0){
 
             //Validação de ID válido, chama a função da controller que verifica no BD se o ID existe e valida o ID
-            let validarID = await buscarAtorId(id_ator)
+            let validarID = await buscarRoteiristaId(id_roteirista)
 
             if(validarID.status_code == 200){
 
-                let resultAtores = await atorDAO.setDeleteActors(Number(id_ator))
+                let resultRoteirista = await roteiristaDAO.setDeleteScreenwriters(Number(id_roteirista))
 
-                if(resultAtores){
+                if(resultRoteirista){
                     
                         MESSAGES.DEFAULT_HEADER.status      = MESSAGES.SUCCESS_DELETED_ITEM.status
                         MESSAGES.DEFAULT_HEADER.status_code = MESSAGES.SUCCESS_DELETED_ITEM.status_code
                         MESSAGES.DEFAULT_HEADER.message     = MESSAGES.SUCCESS_DELETED_ITEM.message
-                        MESSAGES.DEFAULT_HEADER.items.ator = resultAtores
+                        MESSAGES.DEFAULT_HEADER.items.roteirista = resultRoteirista
                         delete MESSAGES.DEFAULT_HEADER.items
                         return MESSAGES.DEFAULT_HEADER //200
             
@@ -254,9 +252,9 @@ const excluirAtor = async (id_ator) => {
 }
 
 module.exports = {
-    listarAtores,
-    buscarAtorId,
-    inserirAtor,
-    atualizarAtor,
-    excluirAtor
+    listarRoteiristas,
+    buscarRoteiristaId,
+    inserirRoteirista,
+    atualizarRoteirista,
+    excluirRoteirista
 }

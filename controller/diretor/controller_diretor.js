@@ -108,10 +108,10 @@ const inserirDiretor = async (diretor, contentType) => {
 
     try{
 
-        //validação do tipo de conteudo da requisição (obrigDiretorio ser um json)
+        //validação do tipo de conteudo da requisição (obrigatorio ser um json)
         if (String(contentType).toUpperCase() == 'APPLICATION/JSON'){
 
-            //chama funcao de validar todos os filmes
+            //chama funcao de validar todos os diretores
             let validar = await validarDadosDiretor(diretor)
 
             if(!validar){
@@ -124,7 +124,7 @@ const inserirDiretor = async (diretor, contentType) => {
                     //chama a função para receber o ID gerado no DB
                     let lastID = await diretorDAO.getSelectLastId()
                     if(lastID){
-                        //adiciona o ID no JSON com os dados do genero
+                        //adiciona o ID no JSON com os dados do diretor
                         diretor.id_diretor = lastID
                         MESSAGES.DEFAULT_HEADER.status      = MESSAGES.SUCCESS_CREATED_ITEM.status
                         MESSAGES.DEFAULT_HEADER.status_code = MESSAGES.SUCCESS_CREATED_ITEM.status_code
@@ -160,10 +160,10 @@ const atualizarDiretor = async (diretor, id_diretor, contentType) => {
 
     try{
 
-        //validação do tipo de conteudo da requisição (obrigDiretorio ser um json)
+        //validação do tipo de conteudo da requisição (obrigatorio ser um json)
         if (String(contentType).toUpperCase() == 'APPLICATION/JSON'){
 
-                //chama funcao de validar todos os filmes
+                //chama funcao de validar todos os diretores
                 let validar = await validarDadosDiretor(diretor)
 
                 if(!validar){
@@ -191,7 +191,7 @@ const atualizarDiretor = async (diretor, id_diretor, contentType) => {
                         }
 
                     } else {
-                        return validarID //a função buscarGeneroId poderá retornar -> 400, 404 ou 500
+                        return validarID //a função buscarDiretorId poderá retornar -> 400, 404 ou 500
                     }
 
                 } else {

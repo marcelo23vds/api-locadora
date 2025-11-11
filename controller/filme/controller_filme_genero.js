@@ -137,7 +137,6 @@ const inserirFilmeGenero = async (filmeGenero, contentType) => {
                     }
                     
                 } else {
-                    console.log('test')
                     return MESSAGES.ERROR_INTERNAL_SERVER_MODEL //500
                 }
 
@@ -263,7 +262,7 @@ const listarGenerosIdFilme = async (id_filme) => {
         //validação da chegada do ID
         if(!isNaN(id_filme) && id_filme != '' && id_filme != null && id_filme > 0){
             let resultFilmesGeneros = await filmeGeneroDAO.getSelectGenresByIdMovies(Number(id_filme))
-
+            //console.log(resultFilmesGeneros)
             if(resultFilmesGeneros){
                 if(resultFilmesGeneros.length > 0){
 
@@ -274,6 +273,7 @@ const listarGenerosIdFilme = async (id_filme) => {
                     return MESSAGES.DEFAULT_HEADER
 
                 } else {
+                    //console.log(MESSAGES.ERROR_NOT_FOUND)
                     return MESSAGES.ERROR_NOT_FOUND //404
                 }
             } else {

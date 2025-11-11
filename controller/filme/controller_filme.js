@@ -166,17 +166,38 @@ const inserirFilme = async (filme, contentType) => {
 
                         //processar a inserção dos dados na tabela de relação entre filme e genero
 
-                        filme.genero.forEach( async (genero) => {
+                        for(genero of filme.genero){
+                        //filme.genero.forEach( async (genero) => {
+                            //cria o JSON com ID do filme e o ID do genero
                             let filmeGenero = {id_filme: lastID, id_genero: genero.id_genero}
-                            let resultFilmesGeneros = await controllerFilmeGenero.inserirFilmeGenero(filmeGenero)
-                        })
+
+                            //encaminha o JSON com o ID do filme e do genero para a controller_filme_genero
+                            let resultFilmesGeneros = await controllerFilmeGenero.inserirFilmeGenero(filmeGenero, contentType)
+                            // console.log(resultFilmesGeneros)
+
+                            if(resultFilmesGeneros.status_code != 201){
+                                return MESSAGES.ERROR_RELATIONAL_INSERTION //500 problema na tabela de relação
+                            }
+                        }
 
                         //adiciona o ID no JSON com os dados do filme
                         filme.id = lastID
                         MESSAGES.DEFAULT_HEADER.status      = MESSAGES.SUCCESS_CREATED_ITEM.status
                         MESSAGES.DEFAULT_HEADER.status_code = MESSAGES.SUCCESS_CREATED_ITEM.status_code
                         MESSAGES.DEFAULT_HEADER.message     = MESSAGES.SUCCESS_CREATED_ITEM.message
-                        MESSAGES.DEFAULT_HEADER.items       = filme
+
+                        //adicionar no JSON dados do GENERO
+                            //apaga o atributo genero apenas com os IDs que foram enviados no post
+                            delete filme.genero
+
+                            //pesquisa no DB todos os generos que foram associados ao filme
+                            let resultDadosGeneros = await controllerFilmeGenero.listarGenerosIdFilme(lastID)
+                            
+                            //cria novamente o atributo genero e coloca o resultado do DB com os generos
+                            filme.genero = resultDadosGeneros.items.filmes_generos
+                        //
+
+                        MESSAGES.DEFAULT_HEADER.items = filme
 
                         return MESSAGES.DEFAULT_HEADER //201
                     } else {
@@ -184,7 +205,6 @@ const inserirFilme = async (filme, contentType) => {
                     }
                     
                 } else {
-                    console.log('test')
                     return MESSAGES.ERROR_INTERNAL_SERVER_MODEL //500
                 }
 
@@ -197,6 +217,7 @@ const inserirFilme = async (filme, contentType) => {
         }
 
     } catch (error) {
+        console.log(error)
         return MESSAGES.ERROR_INTERNAL_SERVER_CONTROLLER //500
     }
 }

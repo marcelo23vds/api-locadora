@@ -112,7 +112,7 @@ const getSelectLastId = async () => {
         let result = await prisma.$queryRawUnsafe(sql)
 
         if(Array.isArray(result))
-            return Number(result[0].id_genero)
+            return Number(result[0].id_filme_genero)
         else
             return false
 
@@ -126,7 +126,7 @@ const setInsertMoviesGenres = async (filmeGenero) => {
     try {
         
         let sql = `INSERT INTO tbl_filme_genero (id_filme, id_genero) 
-                values( '${filmeGenero.id_filme}, ${filmeGenero.id_genero}')`
+                values( ${filmeGenero.id_filme}, ${filmeGenero.id_genero})`
 
         //executeRawUnsafe() -> executa o script SQL que não tem retorno de valores
         let result = await prisma.$executeRawUnsafe(sql)
@@ -137,6 +137,7 @@ const setInsertMoviesGenres = async (filmeGenero) => {
             return false
 
     } catch (error){
+        console.log(error)
         return false
     }
 }

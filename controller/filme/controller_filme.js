@@ -83,6 +83,16 @@ const listarFilmes = async () => {
 
         if(resultFilmes){
             if(resultFilmes.length > 0){
+
+                //processamento para adicionar os generos aos filmes
+                    for (filme of resultFilmes){
+                        let resultGeneros = await controllerFilmeGenero.listarGenerosIdFilme(filme.id)
+
+                        if (resultGeneros.status_code == 200) {
+                            filme.genero = resultGeneros.items.filmes_generos
+                        }
+                    }
+                //
                 MESSAGES.DEFAULT_HEADER.status          = MESSAGES.SUCCESS_REQUEST.status
                 MESSAGES.DEFAULT_HEADER.status_code     = MESSAGES.SUCCESS_REQUEST.status_code
                 MESSAGES.DEFAULT_HEADER.items.filmes    = resultFilmes

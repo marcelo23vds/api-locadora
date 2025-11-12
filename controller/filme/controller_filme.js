@@ -92,7 +92,7 @@ const listarFilmes = async () => {
                             filme.genero = resultGeneros.items.filmes_generos
                         }
                     }
-                //
+
                 MESSAGES.DEFAULT_HEADER.status          = MESSAGES.SUCCESS_REQUEST.status
                 MESSAGES.DEFAULT_HEADER.status_code     = MESSAGES.SUCCESS_REQUEST.status_code
                 MESSAGES.DEFAULT_HEADER.items.filmes    = resultFilmes
@@ -124,6 +124,15 @@ const buscarFilmeId = async (id) => {
 
             if(resultFilmes){
                 if(resultFilmes.length > 0){
+
+                    //processamento para adicionar os generos aos filmes
+                    for (filme of resultFilmes){
+                        let resultGeneros = await controllerFilmeGenero.listarGenerosIdFilme(filme.id)
+
+                        if (resultGeneros.status_code == 200) {
+                            filme.genero = resultGeneros.items.filmes_generos
+                        }
+                    }
 
                     MESSAGES.DEFAULT_HEADER.status = MESSAGES.SUCCESS_REQUEST.status
                     MESSAGES.DEFAULT_HEADER.status_code = MESSAGES.SUCCESS_REQUEST.status_code
@@ -259,6 +268,7 @@ const atualizarFilme = async (filme, id, contentType) => {
                         let resultFilmes = await filmeDAO.setUpdateMovies(filme)
 
                         if (resultFilmes){
+                            
                             MESSAGES.DEFAULT_HEADER.status      = MESSAGES.SUCCESS_UPDATED_ITEM.status
                             MESSAGES.DEFAULT_HEADER.status_code = MESSAGES.SUCCESS_UPDATED_ITEM.status_code
                             MESSAGES.DEFAULT_HEADER.message     = MESSAGES.SUCCESS_UPDATED_ITEM.message

@@ -104,7 +104,7 @@ CREATE TABLE tbl_filme_genero (
 
 -- CRIANDO O DELETE CASCADE PARA FACILITAR O DELETE DE FILMES
 
--- 1. Tabela de Relacionamento FILME <-> GÊNERO
+-- Tabela de Relacionamento FILME <-> GÊNERO
 ALTER TABLE tbl_filme_genero DROP FOREIGN KEY fk_filme_genero_filme;
 
 ALTER TABLE tbl_filme_genero 
@@ -112,7 +112,7 @@ ADD CONSTRAINT fk_filme_genero_filme
 FOREIGN KEY (id_filme) REFERENCES tbl_filme (id) 
 ON DELETE CASCADE;
 
--- 2. Tabela de Relacionamento FILME <-> ATOR
+-- Tabela de Relacionamento FILME <-> ATOR
 ALTER TABLE tbl_ator_filme DROP FOREIGN KEY fk_ator_filme_filme;
 
 ALTER TABLE tbl_ator_filme 
@@ -120,7 +120,7 @@ ADD CONSTRAINT fk_ator_filme_filme
 FOREIGN KEY (id_filme) REFERENCES tbl_filme(id) 
 ON DELETE CASCADE;
 
--- 3. Tabela de Relacionamento FILME <-> DIRETOR
+-- Tabela de Relacionamento FILME <-> DIRETOR
 ALTER TABLE tbl_diretor_filme DROP FOREIGN KEY fk_diretor_filme_filme;
 
 ALTER TABLE tbl_diretor_filme 
@@ -128,7 +128,7 @@ ADD CONSTRAINT fk_diretor_filme_filme
 FOREIGN KEY (id_filme) REFERENCES tbl_filme(id) 
 ON DELETE CASCADE;
 
--- 4. Tabela de Relacionamento FILME <-> ROTEIRISTA
+-- Tabela de Relacionamento FILME <-> ROTEIRISTA
 ALTER TABLE tbl_roteirista_filme DROP FOREIGN KEY fk_roteirista_filme_filme;
 
 ALTER TABLE tbl_roteirista_filme 
@@ -136,7 +136,7 @@ ADD CONSTRAINT fk_roteirista_filme_filme
 FOREIGN KEY (id_filme) REFERENCES tbl_filme(id) 
 ON DELETE CASCADE;
 
--- 5. Tabela de Classificação (Dependente)
+-- Tabela de Classificação (Dependente)
 ALTER TABLE tbl_classificacao DROP FOREIGN KEY fk_classificacao_filme;
 
 ALTER TABLE tbl_classificacao 

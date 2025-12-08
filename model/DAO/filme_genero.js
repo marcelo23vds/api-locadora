@@ -169,7 +169,7 @@ const setUpdateMoviesGenres = async (filmeGenero) => {
 const setDeleteMoviesGenres = async (id_filme_genero) => {
     try {
         //Script SQL
-        let sql = `DELETE FROM tbl_filme_genero WHERE id_filme_genero=${id_filme_genero}`
+        let sql = `DELETE FROM tbl_filme_genero WHERE id_filme_genero = ${id_filme_genero}`
         
         //Encaminha para o BD o srcipt SQL
         let result = await prisma.$queryRawUnsafe(sql)

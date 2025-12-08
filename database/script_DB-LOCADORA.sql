@@ -1,74 +1,145 @@
--- criar o banco de dados
 CREATE DATABASE db_locadora_filme_ds2m_25_2;
 
--- acessar o banco de dados
 USE db_locadora_filme_ds2m_25_2;
 
--- criar uma tabela no banco de dados
-CREATE TABLE  tbl_filme (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-	nome VARCHAR(100) NOT NULL,
-	sinopse TEXT,
-	data_lancamento DATE,
-	duracao TIME NOT NULL,
-	orcamento DECIMAL(11,2) NOT NULL,
-	trailer VARCHAR(200),
-	capa VARCHAR(200) NOT NULL
+-- Criação da tabela de Filmes
+CREATE TABLE tbl_filme (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL,
+    sinopse TEXT NOT NULL,
+    data_lancamento DATE NOT NULL,
+    duracao TIME NOT NULL,
+    orcamento DECIMAL(11,2) NOT NULL,
+    trailer VARCHAR(200) NOT NULL,
+    capa VARCHAR(200) NOT NULL
 );
 
--- inserir dados na tabela
-INSERT INTO tbl_filme ( nome,
-						sinopse,
-                        data_lancamento,
-                        duracao,
-                        orcamento,
-                        trailer,
-                        capa)
-					values( 'Bastardos Inglórios',
-							'Em Bastardos Inglórios, na Segunda Guerra Mundial, a França está ocupada pelos nazistas. O tenente Aldo Raine (Brad Pitt) é o encarregado de reunir um pelotão de soldados de origem judaica, com o objetivo de realizar uma missão suicida contra os alemães. O objetivo é matar o maior número possível de nazistas, da forma mais cruel possível. Paralelamente Shosanna Dreyfuss (Mélanie Laurent) assiste a execução de sua família pelas mãos do coronel Hans Landa (Christoph Waltz), o que faz com que fuja para Paris. Lá ela se disfarça como operadora e dona de um cinema local, enquanto planeja um meio de se vingar.',
-                            '2009-10-09',
-                            '02:33:00',
-                            70000000,
-                            'https://economia.uol.com.br/videos/?id=trailer-do-filme-bastardos-inglorios-04023060DCB15346',
-                            'https://br.web.img3.acsta.net/c_310_420/medias/nmedia/18/90/43/36/20096333.jpg');                        
-
--- verificar os dados da tabela
-select * from tbl_filme;
-
--- verificar apenas o ultimo filme adicionado na tabela
-select id from tbl_filme order by id desc limit 1;
-
--- criar uma tabela no banco de dados
-CREATE TABLE  tbl_genero (
-    id_genero INT PRIMARY KEY AUTO_INCREMENT,
-	nome_genero VARCHAR(50) NOT NULL
-);
-
--- inserir dados na tabela
-INSERT INTO tbl_genero (nome_genero) values('comedia');
-
--- criar uma tabela no banco de dados
-CREATE TABLE  tbl_ator (
-    id_ator INT PRIMARY KEY AUTO_INCREMENT,
-	nome_ator VARCHAR(50) NOT NULL,
-    data_nascimento DATE NULL,
+-- Criação da tabela de Diretores
+CREATE TABLE tbl_diretor (
+    id_diretor INT AUTO_INCREMENT PRIMARY KEY,
+    nome_diretor VARCHAR(100) NOT NULL,
+    data_nascimento DATE, -- Permite NULL conforme imagem
     nacionalidade VARCHAR(30) NOT NULL,
-    biografia TEXT NULL
+    biografia TEXT -- Permite NULL conforme imagem
 );
 
--- inserir dados na tabela
-INSERT INTO tbl_ator (nome_ator, data_nascimento, nacionalidade, biografia) 
-	values('Keanu Reeves',
-			'1964-09-02',
-            'Canadense',
-            'Keanu Reeves é um ator canadense conhecido por seus aclamados trabalhos no cinema, entre eles Matrix, John Wick e Velocidade Máxima. Ele nasceu em Beirut, mas morou em diversos lugares como Sydney, na Austrália, e Nova Iorque. Mas acabou sendo naturalizado canadense onde viveu a partir dos sete anos de idade. Ele começou a atuar ainda jovem no teatro local participando de algumas peças.'
-            );
+-- Criação da tabela de Atores
+CREATE TABLE tbl_ator (
+    id_ator INT AUTO_INCREMENT PRIMARY KEY,
+    nome_ator VARCHAR(100) NOT NULL,
+    data_nascimento DATE,
+    nacionalidade VARCHAR(30) NOT NULL,
+    biografia TEXT
+);
 
--- criar tabela de relacionamento
+-- Criação da tabela de Roteiristas
+CREATE TABLE tbl_roteirista (
+    id_roteirista INT AUTO_INCREMENT PRIMARY KEY,
+    nome_roteirista VARCHAR(100) NOT NULL,
+    data_nascimento DATE,
+    nacionalidade VARCHAR(30) NOT NULL,
+    biografia TEXT
+);
+
+-- Criação da tabela de Gêneros
+CREATE TABLE tbl_genero (
+    id_genero INT AUTO_INCREMENT PRIMARY KEY,
+    nome_genero VARCHAR(50) NOT NULL
+);
+
+-- Criação da tabela de classificação
+CREATE TABLE tbl_classificacao (
+    id_avaliacao INT AUTO_INCREMENT PRIMARY KEY,
+    faixa_etaria VARCHAR(2) NOT NULL,
+    id_filme INT NOT NULL,
+    CONSTRAINT fk_classificacao_filme FOREIGN KEY (id_filme) 
+        REFERENCES tbl_filme(id)
+);
+
+-- Relacionamento Diretor <-> Filme
+CREATE TABLE tbl_diretor_filme (
+    id_diretor_filme INT AUTO_INCREMENT PRIMARY KEY,
+    id_diretor INT NOT NULL,
+    id_filme INT NOT NULL,
+    CONSTRAINT fk_diretor_filme_diretor FOREIGN KEY (id_diretor) 
+        REFERENCES tbl_diretor(id_diretor),
+    CONSTRAINT fk_diretor_filme_filme FOREIGN KEY (id_filme) 
+        REFERENCES tbl_filme(id)
+);
+
+-- Relacionamento Ator <-> Filme
+CREATE TABLE tbl_ator_filme (
+    id_ator_filme INT AUTO_INCREMENT PRIMARY KEY,
+    id_ator INT NOT NULL,
+    id_filme INT NOT NULL,
+    CONSTRAINT fk_ator_filme_ator FOREIGN KEY (id_ator) 
+        REFERENCES tbl_ator(id_ator),
+    CONSTRAINT fk_ator_filme_filme FOREIGN KEY (id_filme) 
+        REFERENCES tbl_filme(id)
+);
+
+-- Relacionamento Roteirista <-> Filme
+CREATE TABLE tbl_roteirista_filme (
+    id_roteirista_filme INT AUTO_INCREMENT PRIMARY KEY,
+    id_roteirista INT NOT NULL,
+    id_filme INT NOT NULL,
+    CONSTRAINT fk_roteirista_filme_roteirista FOREIGN KEY (id_roteirista) 
+        REFERENCES tbl_roteirista(id_roteirista),
+    CONSTRAINT fk_roteirista_filme_filme FOREIGN KEY (id_filme) 
+        REFERENCES tbl_filme(id)
+);
+
+-- Relacionamento Filme <-> Gênero
 CREATE TABLE tbl_filme_genero (
-    id_filme_genero INT PRIMARY KEY AUTO_INCREMENT,
+    id_filme_genero INT AUTO_INCREMENT PRIMARY KEY,
     id_filme INT NOT NULL,
     id_genero INT NOT NULL,
-    CONSTRAINT FK_FILME_FILME_GENERO FOREIGN KEY (id_filme) REFERENCES tbl_filme(id),
-    CONSTRAINT FK_GENERO_FILME_GENERO FOREIGN KEY (id_genero) REFERENCES tbl_genero(id_genero)
+    CONSTRAINT fk_filme_genero_filme FOREIGN KEY (id_filme) 
+        REFERENCES tbl_filme(id),
+    CONSTRAINT fk_filme_genero_genero FOREIGN KEY (id_genero) 
+        REFERENCES tbl_genero(id_genero)
 );
+
+
+
+-- CRIANDO O DELETE CASCADE PARA FACILITAR O DELETE DE FILMES
+
+-- 1. Tabela de Relacionamento FILME <-> GÊNERO
+ALTER TABLE tbl_filme_genero DROP FOREIGN KEY fk_filme_genero_filme;
+
+ALTER TABLE tbl_filme_genero 
+ADD CONSTRAINT fk_filme_genero_filme 
+FOREIGN KEY (id_filme) REFERENCES tbl_filme (id) 
+ON DELETE CASCADE;
+
+-- 2. Tabela de Relacionamento FILME <-> ATOR
+ALTER TABLE tbl_ator_filme DROP FOREIGN KEY fk_ator_filme_filme;
+
+ALTER TABLE tbl_ator_filme 
+ADD CONSTRAINT fk_ator_filme_filme 
+FOREIGN KEY (id_filme) REFERENCES tbl_filme(id) 
+ON DELETE CASCADE;
+
+-- 3. Tabela de Relacionamento FILME <-> DIRETOR
+ALTER TABLE tbl_diretor_filme DROP FOREIGN KEY fk_diretor_filme_filme;
+
+ALTER TABLE tbl_diretor_filme 
+ADD CONSTRAINT fk_diretor_filme_filme 
+FOREIGN KEY (id_filme) REFERENCES tbl_filme(id) 
+ON DELETE CASCADE;
+
+-- 4. Tabela de Relacionamento FILME <-> ROTEIRISTA
+ALTER TABLE tbl_roteirista_filme DROP FOREIGN KEY fk_roteirista_filme_filme;
+
+ALTER TABLE tbl_roteirista_filme 
+ADD CONSTRAINT fk_roteirista_filme_filme 
+FOREIGN KEY (id_filme) REFERENCES tbl_filme(id) 
+ON DELETE CASCADE;
+
+-- 5. Tabela de Classificação (Dependente)
+ALTER TABLE tbl_classificacao DROP FOREIGN KEY fk_classificacao_filme;
+
+ALTER TABLE tbl_classificacao 
+ADD CONSTRAINT fk_classificacao_filme 
+FOREIGN KEY (id_filme) REFERENCES tbl_filme(id) 
+ON DELETE CASCADE;

@@ -140,7 +140,7 @@ const setInsertMovies = async (filme) => {
 }
 
 //altera um filme pelo ID no banco de dados
-const setUpdateMovies = async (filme) => {
+const setUpdateMovies = async (id, filme) => {
     try {
         
         let sql = `UPDATE tbl_filme SET
@@ -152,7 +152,7 @@ const setUpdateMovies = async (filme) => {
                         trailer         = '${filme.trailer}',
                         capa            = '${filme.capa}'
                         
-                    WHERE id = ${filme.id}`
+                    WHERE id = ${id}`
 
         //executeRawUnsafe() -> executa o script SQL que não tem retorno de valores
         let result = await prisma.$executeRawUnsafe(sql)

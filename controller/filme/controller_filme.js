@@ -258,8 +258,7 @@ const atualizarFilme = async (filme, id, contentType) => {
             if(!validar){
 
                 //processamento
-                //chama a função para inserir um novo filme no DB
-                let resultFilmes = await filmeDAO.setInsertMovies(filme)
+                let resultFilmes = await filmeDAO.setUpdateMovies(id, filme)
 
                 if (resultFilmes){
                     //chama a função para receber o ID gerado no DB

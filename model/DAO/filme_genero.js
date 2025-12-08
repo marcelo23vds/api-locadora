@@ -166,13 +166,13 @@ const setUpdateMoviesGenres = async (filmeGenero) => {
 }
 
 //exclui um filmes_generos pelo ID no banco de dados
-const setDeleteMoviesGenres = async (id_filme_genero) => {
+const setDeleteMoviesGenres = async (id_filme) => {
     try {
         //Script SQL
-        let sql = `DELETE FROM tbl_filme_genero WHERE id_filme_genero = ${id_filme_genero}`
+        let sql = `DELETE FROM tbl_filme_genero WHERE id_filme = ${id_filme}`
         
         //Encaminha para o BD o srcipt SQL
-        let result = await prisma.$queryRawUnsafe(sql)
+        let result = await prisma.$executeRawUnsafe(sql)
 
         if(Array.isArray(result))
             return result

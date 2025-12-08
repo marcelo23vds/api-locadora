@@ -208,45 +208,39 @@ const atualizarFilmeGenero = async (filmeGenero, id_filme_genero, contentType) =
 }
 
 //exclui um filme buscando pelo id
+// Função para excluir os gêneros de um filme (USADA NO UPDATE DO FILME)
 const excluirFilmeGenero = async (id_filme_genero) => {
-    //Criando um objeto novo para as mensagens
+    
+    // Criando um objeto novo para as mensagens
     let MESSAGES = JSON.parse(JSON.stringify(DEFAULT_MESSAGES))
 
     try {
 
-        //Validação da chegada do ID
-        if(!isNaN(id_filme_genero) && id_filme_genero != '' && id_filme_genero != null && id_filme_genero > 0){
+        // Validação básica do ID
+        if (!isNaN(id_filme_genero) && id_filme_genero != '' && id_filme_genero != null && id_filme_genero > 0) {
 
-            //Validação de ID válido, chama a função da controller que verifica no BD se o ID existe e valida o ID
-            let validarID = await buscarFilmeId(id_filme_genero)
+            let resultFilmesGeneros = await filmeGeneroDAO.setDeleteMoviesGenres(Number(id_filme_genero))
 
-            if(validarID.status_code == 200){
-
-                let resultFilmesGeneros = await filmeGeneroDAO.setDeleteMoviesGenres(Number(id_filme_genero))
-
-                if(resultFilmesGeneros){
-                    
-                        MESSAGES.DEFAULT_HEADER.status      = MESSAGES.SUCCESS_DELETED_ITEM.status
-                        MESSAGES.DEFAULT_HEADER.status_code = MESSAGES.SUCCESS_DELETED_ITEM.status_code
-                        MESSAGES.DEFAULT_HEADER.message     = MESSAGES.SUCCESS_DELETED_ITEM.message
-                        delete MESSAGES.DEFAULT_HEADER.items
-                        return MESSAGES.DEFAULT_HEADER //200
-            
-                }else{
-                    return MESSAGES.ERROR_INTERNAL_SERVER_MODEL //500
-                }
-            }else{
-                return MESSAGES.ERROR_NOT_FOUND //404
+            if (resultFilmesGeneros) {
+                MESSAGES.DEFAULT_HEADER.status      = MESSAGES.SUCCESS_DELETED_ITEM.status
+                MESSAGES.DEFAULT_HEADER.status_code = MESSAGES.SUCCESS_DELETED_ITEM.status_code
+                MESSAGES.DEFAULT_HEADER.message     = MESSAGES.SUCCESS_DELETED_ITEM.message
+                delete MESSAGES.DEFAULT_HEADER.items
+                
+                return MESSAGES.DEFAULT_HEADER // Sucesso
+            } else {
+                // Se a DAO retornar false (erro no banco)
+                return MESSAGES.ERROR_INTERNAL_SERVER_MODEL 
             }
-        }else{
+        } else {
             MESSAGES.ERROR_REQUIRED_FIELDS.message += ' [ID incorreto]'
-            return MESSAGES.ERROR_REQUIRED_FIELDS //400
+            return MESSAGES.ERROR_REQUIRED_FIELDS 
         }
 
     } catch (error) {
-        return MESSAGES.ERROR_INTERNAL_SERVER_CONTROLLER //500
+        console.log("Erro na controller excluirFilmeGenero:", error)
+        return MESSAGES.ERROR_INTERNAL_SERVER_CONTROLLER
     }
-
 }
 
 

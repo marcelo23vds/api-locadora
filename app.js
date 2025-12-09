@@ -35,6 +35,7 @@ const generoRoutes      = require('./routes/generoRoutes.js')
 const atorRoutes        = require('./routes/atorRoutes.js')
 const diretorRoutes     = require('./routes/diretorRoutes.js')
 const roteiristaRoutes  = require('./routes/roteiristaRoutes.js')
+const classificacaoRoutes = require('./routes/classificacaoRoutes.js')
 
 //usando as rotas de filme
 app.use('/v1/locadora/filme', cors(), bodyParserJSON, filmesRoutes)
@@ -46,6 +47,8 @@ app.use('/v1/locadora/ator', cors(), bodyParserJSON, atorRoutes)
 app.use('/v1/locadora/diretor', cors(), bodyParserJSON, diretorRoutes)
 //usando as rotas de roteiristas
 app.use('/v1/locadora/roteirista', cors(), bodyParserJSON, roteiristaRoutes)
+//usando as rotas de classificacao
+app.use('/v1/locadora/classificacao', cors(), bodyParserJSON, classificacaoRoutes)
 
 app.listen(PORT, () => {
     console.log('API aguardando requisições...')

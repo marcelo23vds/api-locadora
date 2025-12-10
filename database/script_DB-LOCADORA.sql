@@ -28,7 +28,7 @@ CREATE TABLE tbl_filme (
     orcamento DECIMAL(11,2) NOT NULL,
     trailer VARCHAR(200) NOT NULL,
     capa VARCHAR(200) NOT NULL,
-    id_classificacao INT NOT NULL, -- Nova coluna FK
+    id_classificacao INT NOT NULL,
     CONSTRAINT fk_filme_classificacao FOREIGN KEY (id_classificacao)
         REFERENCES tbl_classificacao(id_classificacao)
 );
@@ -89,18 +89,6 @@ CREATE TABLE tbl_ator_filme (
         ON DELETE CASCADE -- Se apagar o filme, apaga aqui automático
 );
 
--- Relacionamento Roteirista <-> Filme
-CREATE TABLE tbl_roteirista_filme (
-    id_roteirista_filme INT AUTO_INCREMENT PRIMARY KEY,
-    id_roteirista INT NOT NULL,
-    id_filme INT NOT NULL,
-    CONSTRAINT fk_roteirista_filme_roteirista FOREIGN KEY (id_roteirista) 
-        REFERENCES tbl_roteirista(id_roteirista),
-    CONSTRAINT fk_roteirista_filme_filme FOREIGN KEY (id_filme) 
-        REFERENCES tbl_filme(id)
-        ON DELETE CASCADE -- Se apagar o filme, apaga aqui automático
-);
-
 -- Relacionamento Filme <-> Gênero
 CREATE TABLE tbl_filme_genero (
     id_filme_genero INT AUTO_INCREMENT PRIMARY KEY,
@@ -112,3 +100,15 @@ CREATE TABLE tbl_filme_genero (
     CONSTRAINT fk_filme_genero_genero FOREIGN KEY (id_genero) 
         REFERENCES tbl_genero(id_genero)
 );
+
+-- -- Relacionamento Roteirista <-> Filme
+-- CREATE TABLE tbl_roteirista_filme (
+--     id_roteirista_filme INT AUTO_INCREMENT PRIMARY KEY,
+--     id_roteirista INT NOT NULL,
+--     id_filme INT NOT NULL,
+--     CONSTRAINT fk_roteirista_filme_roteirista FOREIGN KEY (id_roteirista) 
+--         REFERENCES tbl_roteirista(id_roteirista),
+--     CONSTRAINT fk_roteirista_filme_filme FOREIGN KEY (id_filme) 
+--         REFERENCES tbl_filme(id)
+--         ON DELETE CASCADE -- Se apagar o filme, apaga aqui automático
+-- );

@@ -2,7 +2,23 @@ CREATE DATABASE db_locadora_filme_ds2m_25_2;
 
 USE db_locadora_filme_ds2m_25_2;
 
--- Criação da tabela de Filmes
+-- Criação da tabela de Classificação (É A PRIMEIRA, POIS É INDEPENDENTE)
+CREATE TABLE tbl_classificacao (
+    id_classificacao INT AUTO_INCREMENT PRIMARY KEY,
+    faixa_etaria VARCHAR(2) NOT NULL,
+    descricao VARCHAR(50) NOT NULL
+);
+
+-- Inserção dos dados padrão de classificação
+INSERT INTO tbl_classificacao (faixa_etaria, descricao) VALUES 
+('L', 'Livre para todos os públicos'),
+('10', 'Não recomendado para menores de 10 anos'),
+('12', 'Não recomendado para menores de 12 anos'),
+('14', 'Não recomendado para menores de 14 anos'),
+('16', 'Não recomendado para menores de 16 anos'),
+('18', 'Não recomendado para menores de 18 anos');
+
+-- Criação da tabela de Filmes (COM A FK DE CLASSIFICAÇÃO)
 CREATE TABLE tbl_filme (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(100) NOT NULL,
@@ -11,19 +27,21 @@ CREATE TABLE tbl_filme (
     duracao TIME NOT NULL,
     orcamento DECIMAL(11,2) NOT NULL,
     trailer VARCHAR(200) NOT NULL,
-    capa VARCHAR(200) NOT NULL
+    capa VARCHAR(200) NOT NULL,
+    id_classificacao INT NOT NULL, -- Nova coluna FK
+    CONSTRAINT fk_filme_classificacao FOREIGN KEY (id_classificacao)
+        REFERENCES tbl_classificacao(id_classificacao)
 );
 
--- Criação da tabela de Diretores
+-- Tabelas Independentes (Atores, Diretores, Roteiristas, Gêneros)
 CREATE TABLE tbl_diretor (
     id_diretor INT AUTO_INCREMENT PRIMARY KEY,
     nome_diretor VARCHAR(100) NOT NULL,
-    data_nascimento DATE, -- Permite NULL conforme imagem
+    data_nascimento DATE,
     nacionalidade VARCHAR(30) NOT NULL,
-    biografia TEXT -- Permite NULL conforme imagem
+    biografia TEXT
 );
 
--- Criação da tabela de Atores
 CREATE TABLE tbl_ator (
     id_ator INT AUTO_INCREMENT PRIMARY KEY,
     nome_ator VARCHAR(100) NOT NULL,
@@ -32,7 +50,6 @@ CREATE TABLE tbl_ator (
     biografia TEXT
 );
 
--- Criação da tabela de Roteiristas
 CREATE TABLE tbl_roteirista (
     id_roteirista INT AUTO_INCREMENT PRIMARY KEY,
     nome_roteirista VARCHAR(100) NOT NULL,
@@ -41,20 +58,12 @@ CREATE TABLE tbl_roteirista (
     biografia TEXT
 );
 
--- Criação da tabela de Gêneros
 CREATE TABLE tbl_genero (
     id_genero INT AUTO_INCREMENT PRIMARY KEY,
     nome_genero VARCHAR(50) NOT NULL
 );
 
--- Criação da tabela de classificação
-CREATE TABLE tbl_classificacao (
-    id_avaliacao INT AUTO_INCREMENT PRIMARY KEY,
-    faixa_etaria VARCHAR(2) NOT NULL,
-    id_filme INT NOT NULL,
-    CONSTRAINT fk_classificacao_filme FOREIGN KEY (id_filme) 
-        REFERENCES tbl_filme(id)
-);
+-- Tabelas de Relacionamento (JÁ COM ON DELETE CASCADE)
 
 -- Relacionamento Diretor <-> Filme
 CREATE TABLE tbl_diretor_filme (
@@ -65,6 +74,7 @@ CREATE TABLE tbl_diretor_filme (
         REFERENCES tbl_diretor(id_diretor),
     CONSTRAINT fk_diretor_filme_filme FOREIGN KEY (id_filme) 
         REFERENCES tbl_filme(id)
+        ON DELETE CASCADE -- Se apagar o filme, apaga aqui automático
 );
 
 -- Relacionamento Ator <-> Filme
@@ -76,6 +86,7 @@ CREATE TABLE tbl_ator_filme (
         REFERENCES tbl_ator(id_ator),
     CONSTRAINT fk_ator_filme_filme FOREIGN KEY (id_filme) 
         REFERENCES tbl_filme(id)
+        ON DELETE CASCADE -- Se apagar o filme, apaga aqui automático
 );
 
 -- Relacionamento Roteirista <-> Filme
@@ -87,6 +98,7 @@ CREATE TABLE tbl_roteirista_filme (
         REFERENCES tbl_roteirista(id_roteirista),
     CONSTRAINT fk_roteirista_filme_filme FOREIGN KEY (id_filme) 
         REFERENCES tbl_filme(id)
+        ON DELETE CASCADE -- Se apagar o filme, apaga aqui automático
 );
 
 -- Relacionamento Filme <-> Gênero
@@ -95,51 +107,8 @@ CREATE TABLE tbl_filme_genero (
     id_filme INT NOT NULL,
     id_genero INT NOT NULL,
     CONSTRAINT fk_filme_genero_filme FOREIGN KEY (id_filme) 
-        REFERENCES tbl_filme(id),
+        REFERENCES tbl_filme(id)
+        ON DELETE CASCADE, -- Se apagar o filme, apaga aqui automático
     CONSTRAINT fk_filme_genero_genero FOREIGN KEY (id_genero) 
         REFERENCES tbl_genero(id_genero)
 );
-
-
-
--- CRIANDO O DELETE CASCADE PARA FACILITAR O DELETE DE FILMES
-
--- Tabela de Relacionamento FILME <-> GÊNERO
-ALTER TABLE tbl_filme_genero DROP FOREIGN KEY fk_filme_genero_filme;
-
-ALTER TABLE tbl_filme_genero 
-ADD CONSTRAINT fk_filme_genero_filme 
-FOREIGN KEY (id_filme) REFERENCES tbl_filme (id) 
-ON DELETE CASCADE;
-
--- Tabela de Relacionamento FILME <-> ATOR
-ALTER TABLE tbl_ator_filme DROP FOREIGN KEY fk_ator_filme_filme;
-
-ALTER TABLE tbl_ator_filme 
-ADD CONSTRAINT fk_ator_filme_filme 
-FOREIGN KEY (id_filme) REFERENCES tbl_filme(id) 
-ON DELETE CASCADE;
-
--- Tabela de Relacionamento FILME <-> DIRETOR
-ALTER TABLE tbl_diretor_filme DROP FOREIGN KEY fk_diretor_filme_filme;
-
-ALTER TABLE tbl_diretor_filme 
-ADD CONSTRAINT fk_diretor_filme_filme 
-FOREIGN KEY (id_filme) REFERENCES tbl_filme(id) 
-ON DELETE CASCADE;
-
--- Tabela de Relacionamento FILME <-> ROTEIRISTA
-ALTER TABLE tbl_roteirista_filme DROP FOREIGN KEY fk_roteirista_filme_filme;
-
-ALTER TABLE tbl_roteirista_filme 
-ADD CONSTRAINT fk_roteirista_filme_filme 
-FOREIGN KEY (id_filme) REFERENCES tbl_filme(id) 
-ON DELETE CASCADE;
-
--- Tabela de Classificação (Dependente)
-ALTER TABLE tbl_classificacao DROP FOREIGN KEY fk_classificacao_filme;
-
-ALTER TABLE tbl_classificacao 
-ADD CONSTRAINT fk_classificacao_filme 
-FOREIGN KEY (id_filme) REFERENCES tbl_filme(id) 
-ON DELETE CASCADE;

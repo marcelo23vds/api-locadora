@@ -22,11 +22,11 @@ router.get('/', async (request, response) => {
 })
 
 //retorna a classificacao filtrando pelo ID
-router.get('/:id_avaliacao', async (request, response) => { // Parametro alterado
+router.get('/:id_classificacao', async (request, response) => { // Parametro alterado
 
-    let idAvaliacao = request.params.id_avaliacao
+    let idClassificacao = request.params.id_classificacao
 
-    let classificacao = await controllerClassificacao.buscarClassificacaoId(idAvaliacao)
+    let classificacao = await controllerClassificacao.buscarClassificacaoId(idClassificacao)
 
     response.status(classificacao.status_code)
     response.json(classificacao)
@@ -49,27 +49,27 @@ router.post('/', async (request, response) => {
 })
 
 //atualizar uma classificacao
-router.put('/:id_avaliacao', async (request, response) => { // Parametro alterado
+router.put('/:id_classificacao', async (request, response) => { // Parametro alterado
     //recebe o id
-    let idAvaliacao = request.params.id_avaliacao
+    let idClassificacao = request.params.id_classificacao
     //recebe os dados a serem atualizados
     let dadosBody = request.body
     //recebe content-type da requisição
     let contentType = request.headers['content-type']
 
     //chama a função para atualizar
-    let classificacao = await controllerClassificacao.atualizarClassificacao(dadosBody, idAvaliacao, contentType)
+    let classificacao = await controllerClassificacao.atualizarClassificacao(dadosBody, idClassificacao, contentType)
 
     response.status(classificacao.status_code)
     response.json(classificacao)
 })
 
 //excluir uma classificacao
-router.delete('/delete/:id_avaliacao', async (request, response) => { // Parametro alterado
+router.delete('/delete/:id_classificacao', async (request, response) => { // Parametro alterado
 
-    let idAvaliacao = request.params.id_avaliacao
+    let idClassificacao = request.params.id_classificacao
 
-    let classificacao = await controllerClassificacao.excluirClassificacao(idAvaliacao)
+    let classificacao = await controllerClassificacao.excluirClassificacao(idClassificacao)
 
     response.status(classificacao.status_code)
     response.json(classificacao)

@@ -19,16 +19,15 @@ const validarDadosClassificacao = async (classificacao) => {
     let MESSAGES = JSON.parse(JSON.stringify(DEFAULT_MESSAGES))
             
     //validações de todas as entradas de dados    
-    // Alterado: validação de faixa_etaria (max 2 chars) e obrigatoriedade do id_filme
+    //validação de faixa_etaria  e obrigatoriedade do descricao
     if (classificacao.faixa_etaria == '' || classificacao.faixa_etaria == undefined || classificacao.faixa_etaria == null || classificacao.faixa_etaria.length > 2){
                       
         MESSAGES.ERROR_REQUIRED_FIELDS.message += '[Faixa etária inválida]'   
         return MESSAGES.ERROR_REQUIRED_FIELDS
 
-    } else if (classificacao.id_filme == '' || classificacao.id_filme == undefined || isNaN(classificacao.id_filme)){
+    } else if (classificacao.descricao == '' || classificacao.descricao == undefined || classificacao.descricao == null || classificacao.descricao.length > 50){
         
-        // Classificação depende de um filme, então id_filme é obrigatório
-        MESSAGES.ERROR_REQUIRED_FIELDS.message += '[ID do Filme inválido]'
+        MESSAGES.ERROR_REQUIRED_FIELDS.message += '[Descrição inválida]'
         return MESSAGES.ERROR_REQUIRED_FIELDS
 
     } else {
@@ -69,7 +68,7 @@ const listarClassificacoes = async () => { // Nome alterado
 }
 
 //retorna uma classificacao filtrando pelo ID
-const buscarClassificacaoId = async (id_avaliacao) => { // Parametro alterado
+const buscarClassificacaoId = async (id_classificacao) => { // Parametro alterado
     
     //criando um objeto novo para as mensagens
     let MESSAGES = JSON.parse(JSON.stringify(DEFAULT_MESSAGES))
@@ -78,8 +77,8 @@ const buscarClassificacaoId = async (id_avaliacao) => { // Parametro alterado
     try{
         
         //validação da chegada do ID
-        if(!isNaN(id_avaliacao) && id_avaliacao != '' && id_avaliacao != null && id_avaliacao > 0){
-            let resultClassificacao = await classificacaoDAO.getSelectClassificacaoById(Number(id_avaliacao)) // Função DAO alterada
+        if(!isNaN(id_classificacao) && id_classificacao != '' && id_classificacao != null && id_classificacao > 0){
+            let resultClassificacao = await classificacaoDAO.getSelectClassificacaoById(Number(id_classificacao)) // Função DAO alterada
 
             if(resultClassificacao){
                 if(resultClassificacao.length > 0){
@@ -132,7 +131,7 @@ const inserirClassificacao = async (classificacao, contentType) => {
                     let lastID = await classificacaoDAO.getSelectLastId()
                     if(lastID){
                         //adiciona o ID no JSON com os dados
-                        classificacao.id_avaliacao = lastID // ID alterado
+                        classificacao.id_classificacao = lastID // ID alterado
                         MESSAGES.DEFAULT_HEADER.status      = MESSAGES.SUCCESS_CREATED_ITEM.status
                         MESSAGES.DEFAULT_HEADER.status_code = MESSAGES.SUCCESS_CREATED_ITEM.status_code
                         MESSAGES.DEFAULT_HEADER.message     = MESSAGES.SUCCESS_CREATED_ITEM.message
@@ -161,7 +160,7 @@ const inserirClassificacao = async (classificacao, contentType) => {
 }
 
 //atualiza uma classificacao buscando pelo id
-const atualizarClassificacao = async (classificacao, id_avaliacao, contentType) => { // Parametro alterado
+const atualizarClassificacao = async (classificacao, id_classificacao, contentType) => { // Parametro alterado
   //criando um objeto novo para as mensagens
   let MESSAGES = JSON.parse(JSON.stringify(DEFAULT_MESSAGES))
 
@@ -176,12 +175,12 @@ const atualizarClassificacao = async (classificacao, id_avaliacao, contentType) 
                 if(!validar){
    
                     //validação de ID válido, chama a função da controller que verifica no BD se o ID existe
-                    let validarID = await buscarClassificacaoId(id_avaliacao)
+                    let validarID = await buscarClassificacaoId(id_classificacao)
 
                     if(validarID.status_code == 200){
                     
                         //adiciona o id no json de dados para ser encaminhado ao DAO
-                        classificacao.id_avaliacao = Number(id_avaliacao)
+                        classificacao.id_classificacao = Number(id_classificacao)
 
                         //chama a função para atualizar no DB
                         let resultClassificacao = await classificacaoDAO.setUpdateClassificacao(classificacao) // Função DAO alterada
@@ -215,7 +214,7 @@ const atualizarClassificacao = async (classificacao, id_avaliacao, contentType) 
 }
 
 //exclui uma classificacao buscando pelo id
-const excluirClassificacao = async (id_avaliacao) => { // Parametro alterado
+const excluirClassificacao = async (id_classificacao) => { // Parametro alterado
 
     //Criando um objeto novo para as mensagens
     let MESSAGES = JSON.parse(JSON.stringify(DEFAULT_MESSAGES))
@@ -223,14 +222,14 @@ const excluirClassificacao = async (id_avaliacao) => { // Parametro alterado
     try {
 
         //Validação da chegada do ID
-        if(!isNaN(id_avaliacao) && id_avaliacao != '' && id_avaliacao != null && id_avaliacao > 0){
+        if(!isNaN(id_classificacao) && id_classificacao != '' && id_classificacao != null && id_classificacao > 0){
 
             //Validação de ID válido
-            let validarID = await buscarClassificacaoId(id_avaliacao)
+            let validarID = await buscarClassificacaoId(id_classificacao)
 
             if(validarID.status_code == 200){
 
-                let resultClassificacao = await classificacaoDAO.setDeleteClassificacao(Number(id_avaliacao)) // Função DAO alterada
+                let resultClassificacao = await classificacaoDAO.setDeleteClassificacao(Number(id_classificacao)) // Função DAO alterada
 
                 if(resultClassificacao){
                     

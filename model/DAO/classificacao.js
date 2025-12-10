@@ -12,8 +12,8 @@ const prisma = new PrismaClient()
 //listar todas as classificações
 const getSelectAllClassificacao = async () => { // Nome da função alterado
     try {
-        // Tabela alterada para tbl_classificacao e ordenação por id_avaliacao
-        let sql = `SELECT * FROM tbl_classificacao ORDER BY id_avaliacao DESC`
+        // Tabela alterada para tbl_classificacao e ordenação por id_classificacao
+        let sql = `SELECT * FROM tbl_classificacao ORDER BY id_classificacao DESC`
 
         let result = await prisma.$queryRawUnsafe(sql) 
 
@@ -29,10 +29,10 @@ const getSelectAllClassificacao = async () => { // Nome da função alterado
 }
 
 //buscar a classificacao pelo ID
-const getSelectClassificacaoById = async (id_avaliacao) => { // Parâmetro alterado para id_avaliacao
+const getSelectClassificacaoById = async (id_classificacao) => { // Parâmetro alterado para id_classificacao
     try {
         // Tabela e ID alterados
-        let sql = `SELECT * FROM tbl_classificacao WHERE id_avaliacao=${id_avaliacao}`
+        let sql = `SELECT * FROM tbl_classificacao WHERE id_classificacao=${id_classificacao}`
 
         let result = await prisma.$queryRawUnsafe(sql) 
 
@@ -50,12 +50,12 @@ const getSelectClassificacaoById = async (id_avaliacao) => { // Parâmetro alter
 const getSelectLastId = async () => {
     try {
         // Tabela e ID alterados
-        let sql = `select id_avaliacao from tbl_classificacao order by id_avaliacao desc limit 1;`
+        let sql = `select id_classificacao from tbl_classificacao order by id_classificacao desc limit 1;`
 
         let result = await prisma.$queryRawUnsafe(sql)
 
         if(Array.isArray(result))
-            return Number(result[0].id_avaliacao) // Campo alterado
+            return Number(result[0].id_classificacao) // Campo alterado
         else
             return false
 
@@ -67,8 +67,8 @@ const getSelectLastId = async () => {
 //insere uma classificacao nova
 const setInsertClassificacao = async (classificacao) => { // Parâmetro alterado
     try {
-        // Adicionado o campo id_filme e faixa_etaria no Insert
-        let sql = `INSERT INTO tbl_classificacao (faixa_etaria, id_filme) values('${classificacao.faixa_etaria}', ${classificacao.id_filme})`
+        // Adicionado o campo descricao e faixa_etaria no Insert
+        let sql = `INSERT INTO tbl_classificacao (faixa_etaria, descricao) values('${classificacao.faixa_etaria}', '${classificacao.descricao}')`
 
         let result = await prisma.$executeRawUnsafe(sql)
 
@@ -85,8 +85,10 @@ const setInsertClassificacao = async (classificacao) => { // Parâmetro alterado
 //altera uma classificacao pelo ID
 const setUpdateClassificacao = async (classificacao) => { // Parâmetro alterado
     try {
-        // Update alterado para faixa_etaria e WHERE id_avaliacao
-        let sql = `UPDATE tbl_classificacao SET faixa_etaria = '${classificacao.faixa_etaria}' WHERE id_avaliacao = ${classificacao.id_avaliacao}`
+        let sql = `UPDATE tbl_classificacao SET 
+                        faixa_etaria = '${classificacao.faixa_etaria}',
+                        descricao = '${classificacao.descricao}'
+                   WHERE id_classificacao = ${classificacao.id_classificacao}`
 
         let result = await prisma.$executeRawUnsafe(sql)
 
@@ -101,10 +103,10 @@ const setUpdateClassificacao = async (classificacao) => { // Parâmetro alterado
 }
 
 //exclui uma classificacao pelo ID
-const setDeleteClassificacao = async (id_avaliacao) => { // Parâmetro alterado
+const setDeleteClassificacao = async (id_classificacao) => { // Parâmetro alterado
     try {
         // Tabela e ID alterados
-        let sql = `DELETE FROM tbl_classificacao WHERE id_avaliacao=${id_avaliacao}`
+        let sql = `DELETE FROM tbl_classificacao WHERE id_classificacao=${id_classificacao}`
         
         // Alterado para executeRawUnsafe para corrigir o erro de retorno do Delete
         let result = await prisma.$executeRawUnsafe(sql)
